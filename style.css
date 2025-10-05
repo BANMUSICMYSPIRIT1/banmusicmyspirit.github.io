@@ -1,1 +1,73 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
 
+.container {
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+h2 {
+  color: #000;
+  margin-bottom: 20px;
+}
+
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.coin-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.coin-buttons button {
+  background: #eee;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.coin-buttons button:hover {
+  background: #ddd;
+}
+
+#buyButton, button {
+  background: #ff0050;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+#buyButton:hover {
+  background: #e60046;
+}
+
+.price-display {
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
