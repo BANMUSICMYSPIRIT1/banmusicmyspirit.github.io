@@ -1,8 +1,33 @@
-Username: Mary123  
-Coins: 700  
-Total: $7.25  
-Payment Options:
-  • Pay with Paystack  
-  • Pay with PayPal  
-  • Pay via Bank Transfer
-[Confirm Payment]
+<!-- Payment buttons area (inside payment.html body) -->
+<div class="payment-options">
+  <a id="paypalBtn" class="pay-option" target="_blank" rel="noopener">💳 Pay with PayPal</a>
+  <a id="waBtn" class="pay-option" target="_blank" rel="noopener">💬 Pay via WhatsApp</a>
+  <a id="bankBtn" class="pay-option" target="_blank" rel="noopener">🏦 Bank transfer / Details</a>
+</div>
+
+<script>
+// read params
+const params = new URLSearchParams(window.location.search);
+const username = params.get("username") || '';
+const coins = params.get("coins") || '';
+const price = params.get("price") || '0.00';
+document.getElementById("details").innerHTML = `
+  <p><strong>Username:</strong> ${username}</p>
+  <p><strong>Coins:</strong> 🪙 ${coins}</p>
+  <p><strong>Total Price:</strong> $${price}</p>
+`;
+
+// ====== PAYPAL (PayPal.Me) ======
+// Replace YOUR_PAYPALME_ID with your PayPal.me ID (example: /YourBusinessName/)
+const PAYPAL_ME_ID = "YOUR_PAYPALME_ID"; // <-- change this to your PayPal.me id
+document.getElementById('paypalBtn').href = `https://paypal.me/${encodeURIComponent(PAYPAL_ME_ID)}/${encodeURIComponent(price)}`;
+
+// ====== WHATSAPP ======
+// Replace with your phone number in international format without plus (example: 2348012345678)
+const WHATSAPP_NUMBER = "2348012345678";
+const waMessage = `Order%0AUsername:%20${encodeURIComponent(username)}%0ACoins:%20${encodeURIComponent(coins)}%0ATotal:%20$${encodeURIComponent(price)}`;
+document.getElementById('waBtn').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
+
+// ====== BANK (link to a page or show bank details) ======
+document.getElementById('bankBtn').href = "bank-details.html"; // or a URL, or show details in page
+</script>
