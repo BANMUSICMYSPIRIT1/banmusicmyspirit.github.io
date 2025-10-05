@@ -1,51 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BANMUSICMYSPIRIT</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoinXchange - TikTok Coin Calculator</title>
 <style>
-  body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#222}
-  .wrap{max-width:980px;margin:0 auto;padding:20px}
-  header{background:#0b74da;color:#fff;padding:18px;border-radius:6px}
-  nav{margin-top:8px}
-  nav a{color:#fff;text-decoration:none;margin-right:12px;padding:8px;border-radius:6px;background:rgba(255,255,255,0.06)}
-  .hero{margin:20px 0;padding:24px;background:#f6f9ff;border-radius:8px}
-  .card{background:#fff;padding:16px;border-radius:8px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-  footer{margin-top:24px;color:#666;font-size:0.9em;text-align:center}
-  @media(max-width:600px){nav{display:flex;flex-direction:column}}
+  body {font-family: Arial, sans-serif; margin: 0; background: #f9f9f9;}
+  header {background: #0b74da; color: #fff; padding: 20px;}
+  nav a {color: white; margin-right: 15px; text-decoration: none;}
+  main {padding: 20px;}
+  .card {background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: 40px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+  input, button {width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;}
+  button {background: #0b74da; color: white; border: none; cursor: pointer;}
+  button:hover {background: #095bb5;}
+  footer {text-align: center; padding: 10px; background: #eee;}
 </style>
 </head>
 <body>
+
 <header>
-  <div class="wrap">
-    <h1>BANMUSICMYSPIRIT</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="services.html">Services</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </div>
+  <h1>CoinXchange</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 </header>
 
-<main class="wrap">
-  <section class="hero">
-    <h2>Welcome to BANMUSICMYSPIRIT</h2>
-    <p>Short line about what you do. "At CoinXchange, we make TikTok coin purchases fast and effortless. Just enter your TikTok username and coin amount - our smart calculator instantly shows the price and total cost.".</p>
-    <p><a href="contact.html">Get in touch →</a></p>
-  </section>
+<main>
+  <h2 style="text-align:center;">Buy TikTok Coins Easily</h2>
 
-  <section class="card">
-    <h3>Featured Service</h3>
-    <p>Describe your top product or service here."Our main services is fast and secure TikTok coin sales. Just enter your TikTok username and the number of coin you need - our system instantly calculates the amount you'll pay. we ensure smooth, quick delivery and reliable support every time."</p>
-  </section>
+  <div class="card">
+    <h3>TikTok Coin Calculator</h3>
+    <label>TikTok Username:</label>
+    <input type="text" id="username" placeholder="Enter your TikTok username">
+
+    <label>Number of Coins:</label>
+    <input type="number" id="coins" placeholder="Enter number of coins">
+
+    <button onclick="calculate()">Calculate Price</button>
+
+    <h3 id="result"></h3>
+  </div>
 </main>
 
-<footer>
-  <div class="wrap">
-    <p>© 2025 BANMUSICMYSPIRIT — <a href="mailto:elonmuck1998@gmail.com">elonmuck1998@gmail.com</a></p>
-  </div>
-</footer>
+<footer>© 2025 CoinXchange</footer>
+
+<script>
+function calculate() {
+  const username = document.getElementById('username').value;
+  const coins = parseInt(document.getElementById('coins').value);
+
+  if (!username || !coins || coins <= 0) {
+    document.getElementById('result').innerText = "Please enter a valid username and coin amount.";
+    return;
+  }
+
+  // 💰 Example price: 1 coin = ₦1.5
+  const pricePerCoin = 1.5;
+  const total = coins * pricePerCoin;
+
+  document.getElementById('result').innerHTML = 
+    `👤 Username: <b>${username}</b><br>💰 Total Price: <b>₦${total.toFixed(2)}</b>`;
+}
+</script>
+
 </body>
 </html>
