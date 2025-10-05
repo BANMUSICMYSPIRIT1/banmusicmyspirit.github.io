@@ -1,72 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TikTok Coins Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TikTok Coin Store</title>
+
+  <!-- favicon (optional) -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- link to your CSS -->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #000;
+      margin-top: 30px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .coin-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .coin-btn {
+      background: #fff;
+      border: 2px solid #ff0050;
+      color: #ff0050;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .coin-btn:hover {
+      background: #ff0050;
+      color: #fff;
+    }
+    .buy-btn {
+      background: #ff0050;
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .buy-btn:hover {
+      background: #e60045;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Logo (optional) -->
+  <img src="logo.png" alt="TikTok Coin Store Logo" 
+       style="height:60px; display:block; margin:10px auto;">
+
   <div class="container">
-    <h2>Buy TikTok Coins</h2>
-    <label>Enter TikTok Username:</label>
-    <input type="text" id="username" placeholder="Enter username">
+    <h1>Buy TikTok Coins 💰</h1>
+    <p>Fast & Secure TikTok Coin Purchase</p>
 
-    <h3>Select Coins:</h3>
-    <div class="coin-buttons">
-      <button onclick="selectCoins(70)">70</button>
-      <button onclick="selectCoins(350)">350</button>
-      <button onclick="selectCoins(700)">700</button>
-      <button onclick="selectCoins(1400)">1400</button>
-      <button onclick="selectCoins(3500)">3500</button>
-      <input type="number" id="customCoins" placeholder="Custom">
+    <input type="text" id="username" placeholder="Enter TikTok username" required />
+
+    <div class="coin-options">
+      <button class="coin-btn" onclick="selectCoins(100)">100 🪙</button>
+      <button class="coin-btn" onclick="selectCoins(500)">500 🪙</button>
+      <button class="coin-btn" onclick="selectCoins(1000)">1000 🪙</button>
+      <button class="coin-btn" onclick="selectCoins(2000)">2000 🪙</button>
     </div>
 
-    <div class="price-display">
-      <p id="priceText">Total: $0.00</p>
-    </div>
-
-    <button id="buyButton" onclick="buyCoins()">Buy</button>
+    <button class="buy-btn" onclick="buyCoins()">Buy Now</button>
   </div>
 
   <script>
+    const COIN_RATE = 0.01; // $0.01 per coin
+
     let selectedCoins = 0;
 
     function selectCoins(amount) {
       selectedCoins = amount;
-      calculatePrice();
+      alert(`${amount} coins selected`);
     }
-
-    function calculatePrice() {
-      const custom = document.getElementById("customCoins").value;
-      const coins = custom ? parseInt(custom) : selectedCoins;
-      const price = (coins * 0.01).toFixed(2);
-      document.getElementById("priceText").innerText = `Total: $${price}`;
-    }
-
-    document.getElementById("customCoins").addEventListener("input", calculatePrice);
 
     function buyCoins() {
-      const username = document.getElementById("username").value;
-      const coins = document.getElementById("customCoins").value || selectedCoins;
-      const price = (coins * 0.01).toFixed(2);
-      if (!username || coins == 0) {
-        alert("Please enter username and select coins!");
+      const username = document.getElementById("username").value.trim();
+
+      if (!username || selectedCoins === 0) {
+        alert("Please enter your TikTok username and select a coin package.");
         return;
       }
-      window.location.href = `payment.html?username=${encodeURIComponent(username)}&coins=${coins}&price=${price}`;
+
+      const totalPrice = (selectedCoins * COIN_RATE).toFixed(2);
+      // Redirect to payment page with data
+      window.location.href = `payment.html?username=${encodeURIComponent(username)}&coins=${selectedCoins}&price=${totalPrice}`;
     }
   </script>
+
 </body>
 </html>
-<nav>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="recharge.html">Get Coins</a></li>
-    <li><a href="order.html">Order Summary</a></li>
-    <li><a href="custom.html">Custom Coins</a></li>
-    <li><a href="success.html">Success Page</a></li>
-  </ul>
-</nav>
-
-	
