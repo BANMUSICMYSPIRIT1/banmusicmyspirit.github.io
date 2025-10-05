@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>invisible TikTok Coins calculator</title>
+  <title>TikTok Coins Calculator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,14 +34,17 @@
 
     function selectCoins(amount) {
       selectedCoins = amount;
-      
+      calculatePrice();
+    }
+
+    function calculatePrice() {
       const custom = document.getElementById("customCoins").value;
       const coins = custom ? parseInt(custom) : selectedCoins;
       const price = (coins * 0.01).toFixed(2);
       document.getElementById("priceText").innerText = `Total: $${price}`;
     }
 
-    document.getElementById("customCoins").addEventListener("input", );
+    document.getElementById("customCoins").addEventListener("input", calculatePrice);
 
     function buyCoins() {
       const username = document.getElementById("username").value;
@@ -56,3 +59,4 @@
   </script>
 </body>
 </html>
+	
