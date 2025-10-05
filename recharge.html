@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Recharge Widget</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bg:#f8f9fb; --card:#fff; --muted:#6b7280; --primary:#1f2937; --accent:#ff2d55; --coin:#f5c84a; --radius:12px; --shadow:0 6px 20px rgba(18,24,38,0.08); --max-width:420px; --gap:12px; }
+body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#111; display:flex; align-items:flex-start; justify-content:center; padding:24px;}
+.wrapper{width:100%; max-width:var(--max-width);} 
+.header{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+.profile{display:flex; align-items:center; gap:12px;}
+.avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#eee,#ddd);display:inline-block;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.username{font-weight:600;}
+.balance{font-size:13px;color:var(--muted);}
+.logout{font-size:14px;color:var(--muted);cursor:pointer;}
+.section{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:16px;}
+.section h2{margin:0 0 12px 0;font-size:16px;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.option{padding:12px;border-radius:10px;border:1px solid #eee;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform .12s; background:linear-gradient(180deg,#fff,#fff); }
+.option:hover{transform:translateY(-3px);}
+.option.selected{border:2px solid var(--accent);box-shadow:0 6px 18px rgba(255,45,85,0.08);}
+.option .left{display:flex;flex-direction:column;}
+.coins{font-weight:700;}
+.price{font-size:13px;color:var(--muted);margin-top:4px;}
+.coin-badge{display:flex;align-items:center;gap:6px;font-weight:700;background:var(--coin);padding:6px 8px;border-radius:999px;font-size:13px;color:#222;}
+.custom-input{display:none;margin-top:8px;}
+.exchange{display:flex;flex-direction:column;gap:8px;}
+.exchange-row{display:flex;align-items:center;justify-content:space-between;}
+.total-bar{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:10px;background:#f3f4f6;font-weight:700;margin-bottom:70px;}
+.recharge-btn{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;width:calc(100% - 48px);max-width:420px;background:var(--accent);color:#fff;border:none;padding:14px;border-radius:14px;font-weight:700;box-shadow:0 10px 30px rgba(33,33,33,0.12);cursor:pointer;}
+.small{font-size:13px;color:var(--muted);}
+.note{font-size:12px;color:var(--muted);margin-top:8px;}
+@media(min-width:480px){ body{padding:40px;} .wrapper{margin-top:20px;} .recharge-btn{max-width:400px;} }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <div class="profile">
+      <div class="avatar"><img id="logo" src="assets/logo.png" alt="logo"></div>
+      <div>
+        <div class="username" id="username">romeo39k</div>
+        <div class="balance" id="balance">13,722 coins</div>
+      </div>
+    </div>
+    <div class="logout">Log out</div>
+  </div>
+
+  <div class="section">
+    <h2>Recharge</h2>
+    <div id="optionsGrid" class="grid">
+      <!-- options inserted by JS -->
+    </div>
+    <div class="note">Tap a package to select it. For custom packs choose "Custom".</div>
+  </div>
+
+  <div class="section">
+    <h2>Exchange Coins</h2>
+    <div class="exchange">
+      <div class="exchange-row">
+        <div class="small">Exchange for Coins</div>
+        <div>
+          <input id="exchangeInput" type="number" min="0" placeholder="0" style="width:120px;padding:8px;border-radius:8px;border:1px solid #e6e6e6">
+        </div>
+      </div>
+      <div class="exchange-row">
+        <div class="small">Use</div>
+        <div id="exchangeUse" class="small">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-bar section" style="margin-bottom:120px;">
+    <div>Total</div>
+    <div id="totalPrice">€0.00</div>
+  </div>
+
+</div>
+
+<button class="recharge-btn" id="rechargeBtn">Recharge</button>
+
+<script>
+/*
+  ---- EDITABLE SETTINGS ----
+  To change available packages edit the `packages` array below.
+  Each package is {coins: number, price: number}
+  Currency symbol can be changed in `currency`
+  Exchange rate (coins -> €) is `exchangeRate` (coins * exchangeRate = €)
+*/
+const currency = '€';
+const exchangeRate = 0.005; // 1 coin = €0.005 (EDIT as needed)
+
+const packages = [
+  {coins:70, price:0.99},
+  {coins:350, price:4.99},
+  {coins:700, price:9.99},
+  {coins:1400, price:19.99},
+  {coins:3500, price:49.99},
+  {coins:7000, price:89.99},
+  {coins:17500, price:199.99},
+  {coins:'Custom', price:0}
+];
+
+// -----------------------
+
+const optionsGrid = document.getElementById('optionsGrid');
+let selectedIndex = 0;
+let customValues = {coins:0, price:0};
+
+function formatPrice(v){ return currency + v.toFixed(2); }
+
+function createOption(pkg, index){
+  const el = document.createElement('button');
+  el.className = 'option';
+  el.dataset.index = index;
+  el.type = 'button';
+  el.innerHTML = `
+    <div class="left">
+      <div class="coins">${pkg.coins}</div>
+      <div class="price">${pkg.price ? formatPrice(pkg.price) : (pkg.coins==='Custom' ? 'tap to set' : '')}</div>
+    </div>
+    <div class="coin-badge">${typeof pkg.coins === 'number' ? pkg.coins : 'Custom'}</div>
+  `;
+  el.addEventListener('click', onSelect);
+  return el;
+}
+
+function renderOptions(){
+  optionsGrid.innerHTML = '';
+  packages.forEach((p,i)=>{
+    const opt = createOption(p,i);
+    if(i===selectedIndex) opt.classList.add('selected');
+    optionsGrid.appendChild(opt);
+    if(p.coins==='Custom'){
+      // append custom input under this option
+      const custom = document.createElement('div');
+      custom.className = 'custom-input';
+      custom.innerHTML = `
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <input id="customCoins" type="number" placeholder="Coins" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e6e6">
+          <input id="customPrice" type="number" step="0.01" placeholder="Price (€)" style="width:120px;padding:8px;border-radius:8px;border:1px solid #e6e6e6">
+        </div>
+      `;
+      if(i===selectedIndex) custom.style.display = 'block';
+      optionsGrid.appendChild(custom);
+    }
+  });
+}
+
+function onSelect(e){
+  const idx = Number(e.currentTarget.dataset.index);
+  selectedIndex = idx;
+  // if custom selected, show inputs
+  const customInput = document.querySelector('.custom-input');
+  if(customInput) customInput.style.display = 'none';
+  renderOptions();
+  if(packages[idx].coins==='Custom'){
+    const custom = document.querySelector('.custom-input');
+    if(custom){
+      custom.style.display = 'block';
+      const coinsIn = document.getElementById('customCoins');
+      const priceIn = document.getElementById('customPrice');
+      coinsIn.value = customValues.coins || '';
+      priceIn.value = customValues.price || '';
+      coinsIn.addEventListener('input', ()=>{
+        customValues.coins = Number(coinsIn.value) || 0;
+        updateTotal();
+      });
+      priceIn.addEventListener('input', ()=>{
+        customValues.price = Number(priceIn.value) || 0;
+        updateTotal();
+      });
+    }
+  } else {
+    updateTotal();
+  }
+  // mark selected class
+  document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+  const selectedBtn = document.querySelector(`.option[data-index='${idx}']`);
+  if(selectedBtn) selectedBtn.classList.add('selected');
+}
+
+function getSelectedPrice(){
+  const p = packages[selectedIndex];
+  if(p.coins==='Custom') return customValues.price || 0;
+  return p.price || 0;
+}
+
+function getSelectedCoins(){
+  const p = packages[selectedIndex];
+  if(p.coins==='Custom') return customValues.coins || 0;
+  return p.coins || 0;
+}
+
+const exchangeInput = document.getElementById('exchangeInput');
+exchangeInput.addEventListener('input', ()=>{
+  updateTotal();
+});
+
+function updateTotal(){
+  const selectedPrice = getSelectedPrice();
+  const exchangeCoins = Number(exchangeInput.value) || 0;
+  const exchangeValue = exchangeCoins * exchangeRate;
+  const total = Math.max(0, selectedPrice - exchangeValue);
+  document.getElementById('exchangeUse').innerText = exchangeCoins.toLocaleString();
+  document.getElementById('totalPrice').innerText = formatPrice(total);
+}
+
+document.getElementById('rechargeBtn').addEventListener('click', ()=>{
+  const coins = getSelectedCoins();
+  const price = getSelectedPrice();
+  const exchangeCoins = Number(exchangeInput.value)||0;
+  alert(`You chose to recharge ${coins} coins for ${formatPrice(price)}.\nUsing ${exchangeCoins} coins for exchange.\nTotal to pay: ${document.getElementById('totalPrice').innerText}`);
+  // Here: connect to your payment API or backend to process the recharge
+});
+
+// initial render
+renderOptions();
+updateTotal();
+
+</script>
+</body>
+</html>
