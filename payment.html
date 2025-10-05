@@ -66,7 +66,7 @@
 
     <h3>Select a Payment Method</h3>
     <a id="paypalBtn" class="pay-option" target="_blank">💳 Pay with PayPal</a>
-    <a id="whatsappBtn" class="pay-option" target="_blank">💬 Pay via WhatsApp</a>
+    <a id="bank cardbtn" class="pay-option" target="_blank">💬 Pay via bank card</a>
     <a id="bankBtn" class="pay-option" target="_blank">🏦 Bank Transfer</a>
   </div>
 
@@ -86,11 +86,11 @@
 
     // Set up payment links
     const PAYPAL_ID = "YourPayPalMeName"; // Replace with your PayPal.me name
-    const WHATSAPP_NUMBER = "2348012345678"; // Replace with your WhatsApp number
+    const BANK CARD = "2348012345678"; // Replace with your Bank card
     const BANK_PAGE = "bank.html"; // You can create this page later
 
     document.getElementById("paypalBtn").href = `https://paypal.me/${encodeURIComponent(PAYPAL_ID)}/${price}`;
-    document.getElementById("whatsappBtn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=Order%20Details%0AUsername:%20${encodeURIComponent(username)}%0ACoins:%20${coins}%0ATotal:%20$${price}`;
+    document.getElementById("bankcardbtn").href = `https://bankcard.me/${BANK CARD}?text=Order%20Details%0AUsername:%20${encodeURIComponent(username)}%0ACoins:%20${coins}%0ATotal:%20$${price}`;
     document.getElementById("bankBtn").href = BANK_PAGE;
   </script>
 
