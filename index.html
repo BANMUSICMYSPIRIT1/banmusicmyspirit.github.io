@@ -1,26 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TikTok Coins Calculator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TikTok Coins Store</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h2>Buy TikTok Coins 🪙</h2>
 
-    <label>Enter TikTok Username:</label>
-    <input type="text" id="username" placeholder="Enter username">
+    <label for="username">TikTok Username:</label>
+    <input type="text" id="username" placeholder="Enter your username" />
 
-    <h3>Select Coins:</h3>
-    <div class="coin-buttons">
-      <button onclick="selectCoins(70, 0.70)">🪙 70 — $0.70</button>
-      <button onclick="selectCoins(350, 3.50)">🪙 350 — $3.50</button>
-      <button onclick="selectCoins(700, 7.00)">🪙 700 — $7.00</button>
-      <button onclick="selectCoins(1400, 14.00)">🪙 1400 — $14.00</button>
-      <button onclick="selectCoins(3500, 35.00)">🪙 3500 — $35.00</button>
-      <input type="number" id="customCoins" placeholder="Custom 🪙">
+    <h3>Select Coins</h3>
+    <div class="coin-grid">
+      <div class="coin-card" onclick="selectCoins(70, 0.70)">
+        <img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="coin">
+        <p>🪙 70</p>
+        <span>$0.70</span>
+      </div>
+      <div class="coin-card" onclick="selectCoins(350, 3.50)">
+        <img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="coin">
+        <p>🪙 350</p>
+        <span>$3.50</span>
+      </div>
+      <div class="coin-card" onclick="selectCoins(700, 7.00)">
+        <img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="coin">
+        <p>🪙 700</p>
+        <span>$7.00</span>
+      </div>
+      <div class="coin-card" onclick="selectCoins(1400, 14.00)">
+        <img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="coin">
+        <p>🪙 1400</p>
+        <span>$14.00</span>
+      </div>
+      <div class="coin-card" onclick="selectCoins(3500, 35.00)">
+        <img src="https://cdn-icons-png.flaticon.com/512/1864/1864593.png" alt="coin">
+        <p>🪙 3500</p>
+        <span>$35.00</span>
+      </div>
+    </div>
+
+    <div class="custom">
+      <label for="customCoins">Custom Amount</label>
+      <input type="number" id="customCoins" placeholder="Enter coins 🪙" />
     </div>
 
     <div class="price-display">
@@ -39,6 +63,7 @@
       selectedPrice = price;
       document.getElementById("customCoins").value = "";
       updatePriceText();
+      highlightSelection(amount);
     }
 
     function updatePriceText() {
@@ -49,6 +74,13 @@
       } else {
         document.getElementById("priceText").innerText = `Total: $${selectedPrice.toFixed(2)}`;
       }
+    }
+
+    function highlightSelection(amount) {
+      const cards = document.querySelectorAll(".coin-card");
+      cards.forEach(card => card.classList.remove("selected"));
+      const selected = Array.from(cards).find(card => card.textContent.includes(amount));
+      if (selected) selected.classList.add("selected");
     }
 
     document.getElementById("customCoins").addEventListener("input", updatePriceText);
@@ -67,133 +99,5 @@
       window.location.href = `payment.html?username=${encodeURIComponent(username)}&coins=${coins}&price=${price}`;
     }
   </script>
-</body>
-</html>
-	
-
-    margin: auto;
-  }
-  input, button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-  }
-  .coins {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 15px;
-  }
-  .coin-option {
-    background: #f6f6f6;
-    border: 2px solid transparent;
-    text-align: center;
-    padding: 15px 5px;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  .coin-option.active {
-    border-color: #ff004f;
-    background: #ffeef2;
-  }
-  .buy {
-    background: #ff004f;
-    color: #fff;
-    border: none;
-    font-weight: bold;
-    margin-top: 25px;
-    font-size: 18px;
-  }
-  footer {
-    text-align: center;
-    padding: 10px;
-    color: #666;
-    font-size: 14px;
-  }
-</style>
-</head>
-<body>
-
-<header>
-  <h2>Get Coins</h2>
-</header>
-
-<main>
-  <label>Enter Username</label>
-  <input type="text" id="username" placeholder="TikTok username">
-
-  <h3>Recharge</h3>
-  <p style="font-size:14px;color:#666;">Save up to 25% with lower service fees</p>
-
-  <div class="coins">
-    <div class="coin-option" onclick="selectCoins(30, 0.31)">💰 30<br>$0.31</div>
-    <div class="coin-option" onclick="selectCoins(350, 3.65)">💰 350<br>$3.65</div>
-    <div class="coin-option" onclick="selectCoins(700, 7.25)">💰 700<br>$7.25</div>
-    <div class="coin-option" onclick="selectCoins(1400, 14.49)">💰 1400<br>$14.49</div>
-    <div class="coin-option" onclick="selectCoins(3500, 36.20)">💰 3500<br>$36.20</div>
-    <div class="coin-option" onclick="customCoin()">Custom</div>
-  </div>
-
-  <div id="customBox" style="display:none; margin-top:10px;">
-    <input type="number" id="customAmount" placeholder="Enter custom coins">
-    <button onclick="calcCustom()">Calculate</button>
-  </div>
-
-  <button class="buy" id="buyButton" onclick="buyNow()" disabled>Buy</button>
-
-  <h3 id="summary"></h3>
-</main>
-
-<footer>© 2025 CoinXchange</footer>
-
-<script>
-let selectedCoins = 0;
-let selectedPrice = 0;
-
-function selectCoins(coins, price) {
-  document.querySelectorAll('.coin-option').forEach(c => c.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  document.getElementById('customBox').style.display = "none";
-  selectedCoins = coins;
-  selectedPrice = price;
-  document.getElementById('buyButton').disabled = false;
-  document.getElementById('summary').innerHTML = `Selected: ${coins} coins - Total: $${price}`;
-}
-
-function customCoin() {
-  document.querySelectorAll('.coin-option').forEach(c => c.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  document.getElementById('customBox').style.display = "block";
-  document.getElementById('summary').innerHTML = "";
-  document.getElementById('buyButton').disabled = true;
-}
-
-function calcCustom() {
-  const amount = parseFloat(document.getElementById('customAmount').value);
-  if (isNaN(amount) || amount <= 0) {
-    alert("Please enter a valid number of coins");
-    return;
-  }
-  const rate = 0.0103; // $ per coin (adjust this if you want)
-  selectedCoins = amount;
-  selectedPrice = (amount * rate).toFixed(2);
-  document.getElementById('summary').innerHTML = `Selected: ${amount} coins - Total: $${selectedPrice}`;
-  document.getElementById('buyButton').disabled = false;
-}
-
-function buyNow() {
-  const username = document.getElementById('username').value.trim();
-  if (!username) {
-    alert("Please enter your TikTok username first");
-    return;
-  }
-  alert(`Order summary:\nUsername: ${username}\nCoins: ${selectedCoins}\nTotal: $${selectedPrice}`);
-  // You could link this to WhatsApp or payment gateway here.
-}
-</script>
-
 </body>
 </html>
