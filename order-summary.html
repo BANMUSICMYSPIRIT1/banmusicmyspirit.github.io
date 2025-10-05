@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Order Summary — Demo</title>
+<style>
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+background: #f9f9f9;
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: flex-start;
+min-height: 100vh;
+}
+
+.container {
+background: white;
+width: 400px;
+max-width: 95%;
+margin: 40px auto;
+border-radius: 18px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+padding: 22px 24px;
+box-sizing: border-box;
+}
+
+.header {
+display: flex;
+align-items: center;
+justify-content: center;
+margin-bottom: 8px;
+}
+
+.header h1 {
+font-size: 20px;
+margin: 0;
+font-weight: 700;
+}
+
+.secure {
+color: #00a47e;
+font-weight: 600;
+font-size: 15px;
+text-align: center;
+margin-bottom: 24px;
+}
+
+.summary {
+display: flex;
+justify-content: space-between;
+margin-bottom: 12px;
+font-size: 16px;
+}
+
+.summary strong {
+font-size: 17px;
+}
+
+.section-title {
+font-weight: 600;
+color: #555;
+font-size: 15px;
+margin: 22px 0 10px;
+}
+
+.payment-option {
+display: flex;
+align-items: center;
+justify-content: space-between;
+background: #f7f7f7;
+padding: 14px 16px;
+border-radius: 10px;
+margin-bottom: 10px;
+cursor: pointer;
+border: 1px solid transparent;
+}
+
+.payment-option:hover {
+border-color: #ccc;
+}
+
+.payment-option.selected {
+border-color: #007aff;
+background: #f0f7ff;
+}
+
+.pay-button {
+display: block;
+width: 100%;
+background: #007aff;
+color: white;
+font-weight: 700;
+font-size: 17px;
+padding: 14px 0;
+border: none;
+border-radius: 12px;
+cursor: pointer;
+margin-top: 24px;
+transition: background 0.2s ease;
+}
+
+.pay-button:hover {
+background: #005dd1;
+}
+
+.disclaimer {
+font-size: 12px;
+color: #777;
+margin-top: 14px;
+line-height: 1.4;
+}
+
+.total {
+font-size: 18px;
+font-weight: 700;
+display: flex;
+justify-content: space-between;
+margin-top: 22px;
+border-top: 1px solid #eee;
+padding-top: 10px;
+}
+
+@media(max-width:480px){
+.container {
+border-radius: 0;
+height: 100vh;
+box-shadow: none;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="header">
+<h1>Order Summary</h1>
+</div>
+
+<div class="secure">🔒 Secure payment</div>
+
+<div class="summary">
+<div>Account</div>
+<div><strong id="username"></strong></div>
+</div>
+<div class="summary">
+<div><strong id="coins"></strong></div>
+<div><strong id="price"></strong></div>
+</div>
+
+<div class="section-title">Payment method</div>
+
+<div id="card" class="payment-option">
+<div>💳 Add Credit or Debit Card</div>
+<div>›</div>
+</div>
+
+<div id="apple" class="payment-option selected">
+<div>🍎 Apple Pay</div>
+<input type="radio" name="payMethod" checked />
+</div>
+
+<div class="disclaimer">
+By tapping <strong>Pay</strong> to make a purchase, you acknowledge that you are purchasing a limited license to access this digital item.
+</div>
+
+<div class="total">
+<span>Total</span>
+<span id="total"></span>
+</div>
+
+<button class="pay-button" id="payBtn">Pay</button>
+</div>
+
+<script>
+// Example: dynamically fill data
+const username = " "; // leave blank or fill dynamically
+const coins = " "; // leave blank or fill dynamically
+const price = " "; // leave blank or fill dynamically
+
+document.getElementById("username").textContent = username;
+document.getElementById("coins").textContent = coins;
+document.getElementById("price").textContent = price;
+document.getElementById("total").textContent = price;
+document.getElementById("payBtn").textContent = "Pay " + (price || "");
+
+const cardOption = document.getElementById('card');
+const appleOption = document.getElementById('apple');
+const payBtn = document.getElementById('payBtn');
+
+[cardOption, appleOption].forEach(opt => {
+opt.addEventListener('click', () => {
+cardOption.classList.remove('selected');
+appleOption.classList.remove('selected');
+opt.classList.add('selected');
+});
+});
+
+payBtn.addEventListener('click', () => {
+const method = cardOption.classList.contains('selected') ? 'Credit/Debit Card' : 'Apple Pay';
+alert(`✅ Payment successful via ${method}!`);
+});
+</script>
+
+</body>
+</html>
