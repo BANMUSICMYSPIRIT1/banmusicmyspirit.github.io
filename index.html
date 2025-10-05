@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TikTok Coin Store</title>
 
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      text-align: center;
+      padding: 40px 10px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #000;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .buy-btn {
+      background: #ff0050;
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      width: 95%;
+      padding: 12px;
+      font-size: 17px;
+      transition: 0.3s;
+    }
+    .buy-btn:hover {
+      background: #e60045;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Optional logo -->
+  <img src="logo.png" alt="TikTok Coin Store Logo" style="height:60px;margin-bottom:10px;">
+
+  <div class="container">
+    <h1>Buy TikTok Coins 💰</h1>
+    <p>Fast • Safe • Reliable</p>
+
+    <input type="text" id="username" placeholder="Enter TikTok username" required />
+    <input type="number" id="coins" placeholder="Enter number of coins" required min="1" />
+
+    <button class="buy-btn" onclick="buyCoins()">Buy Now</button>
+  </div>
+
+  <script>
+    const COIN_RATE = 0.01; // $0.01 per coin
+
+    function buyCoins() {
+      const username = document.getElementById("username").value.trim();
+      const coins = parseInt(document.getElementById("coins").value);
+
+      if (!username || !coins) {
+        alert("Please enter your TikTok username and coin amount.");
+        return;
+      }
+
+      const totalPrice = (coins * COIN_RATE).toFixed(2);
+      window.location.href = `payment.html?username=${encodeURIComponent(username)}&coins=${coins}&price=${totalPrice}`;
+    }
+  </script>
+
+</body>
+</html>
