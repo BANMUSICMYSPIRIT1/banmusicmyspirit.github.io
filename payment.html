@@ -5,94 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment | TikTok Coin Store</title>
 
+  <!-- ✅ Add this -->
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
 
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      text-align: center;
-      padding: 40px 10px;
-      margin: 0;
-    }
-    .container {
-      background: #fff;
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-    h2 {
-      color: #ff0050;
-    }
-    .details {
-      text-align: left;
-      margin: 20px 0;
-      font-size: 16px;
-    }
-    .details p {
-      margin: 5px 0;
-    }
-    .pay-option {
-      display: block;
-      background: #ff0050;
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-      margin: 10px auto;
-      padding: 12px;
-      border-radius: 8px;
-      width: 90%;
-      transition: 0.3s;
-    }
-    .pay-option:hover {
-      background: #e60045;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Logo -->
-  <img src="logo.png" alt="TikTok Coin Store Logo" style="height:60px;margin-bottom:10px;">
+  <!-- ✅ Add this -->
+  <img src="logo.png" alt="TikTok Coin Store Logo"
+       style="height:60px; display:block; margin:20px auto;">
 
-  <div class="container">
-    <h2>Confirm Your Payment 💳</h2>
-    <div class="details" id="orderDetails">
-      <!-- Details will show here -->
-    </div>
-
-    <h3>Select a Payment Method</h3>
-    <a id="paypalBtn" class="pay-option" target="_blank">💳 Pay with PayPal</a>
-    <a id="bank cardbtn" class="pay-option" target="_blank">💬 Pay via bank card</a>
-    <a id="bankBtn" class="pay-option" target="_blank">🏦 Bank Transfer</a>
-  </div>
-
-  <script>
-    // Read data from URL (sent from index.html)
-    const params = new URLSearchParams(window.location.search);
-    const username = params.get("username");
-    const coins = params.get("coins");
-    const price = params.get("price");
-
-    // Display order details
-    document.getElementById("orderDetails").innerHTML = `
-      <p><strong>Username:</strong> ${username}</p>
-      <p><strong>Coins:</strong> ${coins} 🪙</p>
-      <p><strong>Total Price:</strong> $${price}</p>
-    `;
-
-    // Set up payment links
-    const PAYPAL_ID = "YourPayPalMeName"; // Replace with your PayPal.me name
-    const BANK CARD = "2348012345678"; // Replace with your Bank card
-    const BANK_PAGE = "bank.html"; // You can create this page later
-
-    document.getElementById("paypalBtn").href = `https://paypal.me/${encodeURIComponent(PAYPAL_ID)}/${price}`;
-    document.getElementById("bankcardbtn").href = `https://bankcard.me/${BANK CARD}?text=Order%20Details%0AUsername:%20${encodeURIComponent(username)}%0ACoins:%20${coins}%0ATotal:%20$${price}`;
-    document.getElementById("bankBtn").href = BANK_PAGE;
-  </script>
-
-</body>
-</html>
+  <h2>Confirm Your Payment</h2>
+  <!-- rest of your payment page -->
