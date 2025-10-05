@@ -3,66 +3,143 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CoinXchange - TikTok Coin Calculator</title>
+<title>Get TikTok Coins</title>
 <style>
-  body {font-family: Arial, sans-serif; margin: 0; background: #f9f9f9;}
-  header {background: #0b74da; color: #fff; padding: 20px;}
-  nav a {color: white; margin-right: 15px; text-decoration: none;}
-  main {padding: 20px;}
-  .card {background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: 40px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
-  input, button {width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;}
-  button {background: #0b74da; color: white; border: none; cursor: pointer;}
-  button:hover {background: #095bb5;}
-  footer {text-align: center; padding: 10px; background: #eee;}
+  body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    margin: 0;
+    color: #333;
+  }
+  header {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  main {
+    padding: 20px;
+    max-width: 420px;
+    margin: auto;
+  }
+  input, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  .coins {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .coin-option {
+    background: #f6f6f6;
+    border: 2px solid transparent;
+    text-align: center;
+    padding: 15px 5px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .coin-option.active {
+    border-color: #ff004f;
+    background: #ffeef2;
+  }
+  .buy {
+    background: #ff004f;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    margin-top: 25px;
+    font-size: 18px;
+  }
+  footer {
+    text-align: center;
+    padding: 10px;
+    color: #666;
+    font-size: 14px;
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>CoinXchange</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="services.html">Services</a>
-    <a href="contact.html">Contact</a>
-  </nav>
+  <h2>Get Coins</h2>
 </header>
 
 <main>
-  <h2 style="text-align:center;">Buy TikTok Coins Easily</h2>
+  <label>Enter Username</label>
+  <input type="text" id="username" placeholder="TikTok username">
 
-  <div class="card">
-    <h3>TikTok Coin Calculator</h3>
-    <label>TikTok Username:</label>
-    <input type="text" id="username" placeholder="Enter your TikTok username">
+  <h3>Recharge</h3>
+  <p style="font-size:14px;color:#666;">Save up to 25% with lower service fees</p>
 
-    <label>Number of Coins:</label>
-    <input type="number" id="coins" placeholder="Enter number of coins">
-
-    <button onclick="calculate()">Calculate Price</button>
-
-    <h3 id="result"></h3>
+  <div class="coins">
+    <div class="coin-option" onclick="selectCoins(30, 0.31)">💰 30<br>$0.31</div>
+    <div class="coin-option" onclick="selectCoins(350, 3.65)">💰 350<br>$3.65</div>
+    <div class="coin-option" onclick="selectCoins(700, 7.25)">💰 700<br>$7.25</div>
+    <div class="coin-option" onclick="selectCoins(1400, 14.49)">💰 1400<br>$14.49</div>
+    <div class="coin-option" onclick="selectCoins(3500, 36.20)">💰 3500<br>$36.20</div>
+    <div class="coin-option" onclick="customCoin()">Custom</div>
   </div>
+
+  <div id="customBox" style="display:none; margin-top:10px;">
+    <input type="number" id="customAmount" placeholder="Enter custom coins">
+    <button onclick="calcCustom()">Calculate</button>
+  </div>
+
+  <button class="buy" id="buyButton" onclick="buyNow()" disabled>Buy</button>
+
+  <h3 id="summary"></h3>
 </main>
 
 <footer>© 2025 CoinXchange</footer>
 
 <script>
-function calculate() {
-  const username = document.getElementById('username').value;
-  const coins = parseInt(document.getElementById('coins').value);
+let selectedCoins = 0;
+let selectedPrice = 0;
 
-  if (!username || !coins || coins <= 0) {
-    document.getElementById('result').innerText = "Please enter a valid username and coin amount.";
+function selectCoins(coins, price) {
+  document.querySelectorAll('.coin-option').forEach(c => c.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('customBox').style.display = "none";
+  selectedCoins = coins;
+  selectedPrice = price;
+  document.getElementById('buyButton').disabled = false;
+  document.getElementById('summary').innerHTML = `Selected: ${coins} coins - Total: $${price}`;
+}
+
+function customCoin() {
+  document.querySelectorAll('.coin-option').forEach(c => c.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('customBox').style.display = "block";
+  document.getElementById('summary').innerHTML = "";
+  document.getElementById('buyButton').disabled = true;
+}
+
+function calcCustom() {
+  const amount = parseFloat(document.getElementById('customAmount').value);
+  if (isNaN(amount) || amount <= 0) {
+    alert("Please enter a valid number of coins");
     return;
   }
+  const rate = 0.0103; // $ per coin (adjust this if you want)
+  selectedCoins = amount;
+  selectedPrice = (amount * rate).toFixed(2);
+  document.getElementById('summary').innerHTML = `Selected: ${amount} coins - Total: $${selectedPrice}`;
+  document.getElementById('buyButton').disabled = false;
+}
 
-  // 💰 Example price: 1 coin = ₦1.5
-  const pricePerCoin = 1.5;
-  const total = coins * pricePerCoin;
-
-  document.getElementById('result').innerHTML = 
-    `👤 Username: <b>${username}</b><br>💰 Total Price: <b>₦${total.toFixed(2)}</b>`;
+function buyNow() {
+  const username = document.getElementById('username').value.trim();
+  if (!username) {
+    alert("Please enter your TikTok username first");
+    return;
+  }
+  alert(`Order summary:\nUsername: ${username}\nCoins: ${selectedCoins}\nTotal: $${selectedPrice}`);
+  // You could link this to WhatsApp or payment gateway here.
 }
 </script>
 
