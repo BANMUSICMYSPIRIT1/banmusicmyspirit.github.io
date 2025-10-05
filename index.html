@@ -1,90 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TikTok Coin Store</title>
-
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="stylesheet" href="style.css" />
-
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      margin: 0;
-      text-align: center;
-      padding: 40px 10px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #000;
-      margin-bottom: 10px;
-    }
-    input {
-      width: 90%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    .buy-btn {
-      background: #ff0050;
-      color: #fff;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 8px;
-      width: 95%;
-      padding: 12px;
-      font-size: 17px;
-      transition: 0.3s;
-    }
-    .buy-btn:hover {
-      background: #e60045;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>invisible TikTok Coins calculator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Optional logo -->
-  <img src="logo.png" alt="TikTok Coin Store Logo" style="height:60px;margin-bottom:10px;">
-
   <div class="container">
-    <h1>Buy TikTok Coins 💰</h1>
-    <p>Fast • Safe • Reliable</p>
+    <h2>Buy TikTok Coins</h2>
+    <label>Enter TikTok Username:</label>
+    <input type="text" id="username" placeholder="Enter username">
 
-    <input type="text" id="username" placeholder="Enter TikTok username" required />
-    <input type="number" id="coins" placeholder="Enter number of coins" required min="1" />
+    <h3>Select Coins:</h3>
+    <div class="coin-buttons">
+      <button onclick="selectCoins(70)">70</button>
+      <button onclick="selectCoins(350)">350</button>
+      <button onclick="selectCoins(700)">700</button>
+      <button onclick="selectCoins(1400)">1400</button>
+      <button onclick="selectCoins(3500)">3500</button>
+      <input type="number" id="customCoins" placeholder="Custom">
+    </div>
 
-    <button class="buy-btn" onclick="buyCoins()">Buy Now</button>
+    <div class="price-display">
+      <p id="priceText">Total: $0.00</p>
+    </div>
+
+    <button id="buyButton" onclick="buyCoins()">Buy</button>
   </div>
 
   <script>
-    const COIN_RATE = 0.01; // $0.01 per coin
+    let selectedCoins = 0;
+
+    function selectCoins(amount) {
+      selectedCoins = amount;
+      
+      const custom = document.getElementById("customCoins").value;
+      const coins = custom ? parseInt(custom) : selectedCoins;
+      const price = (coins * 0.01).toFixed(2);
+      document.getElementById("priceText").innerText = `Total: $${price}`;
+    }
+
+    document.getElementById("customCoins").addEventListener("input", );
 
     function buyCoins() {
-      const username = document.getElementById("username").value.trim();
-      const coins = parseInt(document.getElementById("coins").value);
-
-      if (!username || !coins) {
-        alert("Please enter your TikTok username and coin amount.");
+      const username = document.getElementById("username").value;
+      const coins = document.getElementById("customCoins").value || selectedCoins;
+      const price = (coins * 0.01).toFixed(2);
+      if (!username || coins == 0) {
+        alert("Please enter username and select coins!");
         return;
       }
-
-      const totalPrice = (coins * COIN_RATE).toFixed(2);
-      window.location.href = `payment.html?username=${encodeURIComponent(username)}&coins=${coins}&price=${totalPrice}`;
+      window.location.href = `payment.html?username=${encodeURIComponent(username)}&coins=${coins}&price=${price}`;
     }
   </script>
-
 </body>
 </html>
