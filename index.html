@@ -1,177 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Get Coins — Demo</title>
-<style>
-  :root{
-    --tiktok-red:#e02020;
-    --muted:#777;
-    --sheet-bg:#fff;
-    --green:#16a34a;
-    --blue:#1e90ff;
-  }
-  body{font-family:Arial,Helvetica,sans-serif;background:#fff;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
-  .container{max-width:400px;margin:18px auto;padding:15px;border:1px solid #ddd;border-radius:10px;background:#fff}
-  .header{display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;position:relative}
-  .header-icons{position:absolute;right:10px;display:flex;gap:10px}
-  .circle{border:1px solid #000;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
-  .username-bar{display:flex;align-items:center;margin:14px 0;border:1px solid #ddd;border-radius:20px;padding:8px 12px}
-  .username-bar img{width:30px;margin-right:10px}
-  .username-bar input{border:none;outline:none;flex:1;font-size:15px}
-  .recharge-title{font-weight:bold;margin-top:6px;font-size:16px}
-  .recharge-sub{color:#b22222;font-size:14px;margin:6px 0 14px 0}
-  .coin-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .coin-item{border:1px solid #ddd;border-radius:8px;text-align:center;padding:14px 8px;font-size:14px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;user-select:none}
-  .coin-item svg{width:23px;height:23px;margin-bottom:6px}
-  .coin-count{font-size:18px;font-weight:800}
-  .coin-price{font-size:13px;color:#444;margin-top:6px;font-weight:500}
-  .coin-item.custom input{width:72%;text-align:center;border:none;outline:none;font-size:14px;margin-top:8px;padding:6px 4px;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 1px #eee}
-  .coin-item.active{border:2px solid var(--tiktok-red);background:#fff0f0;box-shadow:0 1px 6px rgba(224,32,32,0.06)}
-  .invite{margin:18px 0 6px}
-  .invite img{width:23px;margin-right:8px;vertical-align:middle}
-  .invite p{margin:0;font-size:14px;display:flex;align-items:center;gap:8px}
-  .invite small{font-size:12px;color:gray;margin-top:4px;display:block}
-  .footer{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:16px}
-  .footer .right{color:#b22222;cursor:pointer}
-  .payment-logos{margin:12px 0;display:flex;justify-content:center;gap:14px}
-  .payment-logos img{width:40px}
-  .buy-btn{display:block;width:100%;padding:14px;text-align:center;background:var(--tiktok-red);color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:8px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Coins Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #fff;
+      color: #111;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    header h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+    .icon { font-size: 22px; cursor: pointer; margin-left: 12px; }
 
-  /* ---------- Order Summary ---------- */
-  .sheet{position:fixed;left:0;right:0;bottom:0;margin:auto;width:100%;max-width:420px;pointer-events:none;}
-  .sheet-inner{pointer-events:auto;position:fixed;left:50%;transform:translateX(-50%);bottom:-100%;width:100%;max-width:420px;background:var(--sheet-bg);border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0 -8px 30px rgba(0,0,0,0.12);transition:bottom .28s; padding:18px; height:58vh;overflow:auto;}
-  .sheet.open .sheet-inner{bottom:6px}
-  .sheet-header{display:flex;align-items:center;justify-content:center;position:relative;padding-bottom:6px}
-  .sheet-back{position:absolute;left:10px;top:6px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:22px;font-weight:bold}
-  .sheet-title{font-weight:700;font-size:18px}
-  .sheet-help{position:absolute;right:12px;top:6px;border:1px solid #ddd;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#333}
-  .secure-row{text-align:center;margin:10px 0;font-weight:600;color:var(--green);}
-  .row{display:flex;justify-content:space-between;align-items:center;padding:12px 6px;border-bottom:1px solid #f1f1f1}
-  .row .right{font-weight:700}
-  .pm-list{padding-top:8px}
-  .pm-item{display:flex;align-items:center;justify-content:space-between;padding:12px 6px;cursor:pointer}
-  .pm-radio{width:18px;height:18px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center}
-  .pm-selected .pm-radio{border-color:var(--tiktok-red)}
-  .pm-selected .pm-radio .dot{width:10px;height:10px;border-radius:50%;background:var(--blue)}
-  .notice{font-size:12px;color:#888;margin-top:12px;display:flex;align-items:center;gap:8px}
-  .notice .red{color:var(--tiktok-red);font-weight:700}
-  .notice .chev{margin-left:auto;color:#888}
-  .total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 6px;font-size:16px;font-weight:800;border-top:1px solid #eee;margin-top:10px}
-  .pay-now-btn{display:block;width:100%;padding:14px;background:var(--tiktok-red);color:#fff;border:none;border-radius:10px;font-size:16px;margin-top:12px;cursor:pointer}
+    .container { padding: 20px; }
+    .title { font-size: 20px; font-weight: bold; margin: 15px 0; }
+    .subtitle { font-size: 14px; color: red; margin-bottom: 20px; }
 
-  /* ---------- Processing Page ---------- */
-  .processing-page{display:none;position:fixed;inset:0;background:#fff;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .processing-logo{position:relative;width:100px;height:100px;margin-bottom:20px}
-  .circle-anim{position:absolute;width:60px;height:60px;border-radius:50%;opacity:.9}
-  .circle-red{background:var(--tiktok-red);animation:slideRed 2s infinite}
-  .circle-blue{background:var(--blue);animation:slideBlue 2s infinite}
-  @keyframes slideRed{0%{left:0}50%{left:40px}100%{left:0}}
-  @keyframes slideBlue{0%{right:0}50%{right:40px}100%{right:0}}
-  .processing-title{font-size:20px;font-weight:bold;margin-bottom:8px}
-  .processing-sub{font-size:14px;color:#555;margin-bottom:10px}
-  .timer{font-size:16px;font-weight:600;color:#333}
+    .coin-option {
+      display: flex; justify-content: space-between; align-items: center;
+      border: 1px solid #ddd; border-radius: 8px;
+      padding: 12px; margin-bottom: 12px;
+      cursor: pointer;
+    }
 
-  /* ---------- Success Page ---------- */
-  .success-page{display:none;position:fixed;inset:0;background:#fff;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-  .success-icon{font-size:48px;margin-bottom:10px}
-  .success-title{font-size:22px;font-weight:bold;margin-bottom:10px}
-  .success-info{font-size:14px;color:#444;margin-bottom:6px}
-  .go-back{margin-top:18px;padding:12px 20px;background:var(--tiktok-red);color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
-</style>
+    .buy-btn {
+      display: block;
+      width: 100%; padding: 14px;
+      font-size: 16px; font-weight: bold;
+      text-align: center; border: none; border-radius: 8px;
+      background: red; color: #fff; cursor: pointer;
+      margin-top: 20px;
+    }
+
+    /* ORDER SUMMARY */
+    .summary-row {
+      display: flex; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid #eee;
+      font-size: 15px;
+    }
+    .payment-option {
+      display: flex; align-items: center; margin: 10px 0;
+    }
+    .payment-option img { width: 28px; margin-right: 10px; }
+    .radio { width: 18px; height: 18px; margin-right: 10px; }
+    .card-input {
+      width: 100%; padding: 10px; margin-top: 8px;
+      border: 1px solid #ccc; border-radius: 6px;
+      font-size: 16px; letter-spacing: 2px;
+    }
+
+    /* PROCESSING */
+    .processing {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100vh; text-align: center;
+    }
+    .loader {
+      width: 80px; height: 80px; position: relative;
+      margin-bottom: 20px;
+    }
+    .circle {
+      width: 60px; height: 60px;
+      border-radius: 50%; position: absolute;
+      animation: pulse 1.5s infinite;
+    }
+    .red { background: red; left: 0; top: 10px; }
+    .blue { background: blue; right: 0; top: 10px; animation-delay: 0.75s; }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* SUCCESS */
+    .success {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; height: 100vh;
+      padding: 20px;
+    }
+    .checkmark {
+      font-size: 60px; color: green; margin-bottom: 20px;
+    }
+    .back-btn {
+      margin-top: 25px; padding: 12px 20px;
+      font-size: 15px; font-weight: bold;
+      border: none; border-radius: 8px;
+      background: #eee; cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Page 1: Get Coins -->
-  <div class="container" id="mainPage">
-    <div class="header"><span>Get Coins</span>
-      <div class="header-icons">
-        <div class="circle">…</div>
-        <div class="circle">?</div>
+  <!-- PAGE 1: GET COINS -->
+  <div id="page1">
+    <header>
+      <h1>Get Coins</h1>
+      <div>
+        <span class="icon">⋮</span>
+        <span class="icon">?</span>
       </div>
-    </div>
-    <div class="username-bar">
-      <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok logo">
-      <input id="usernameInput" type="text" placeholder="Enter username">
-    </div>
-    <div class="recharge-title">Recharge</div>
-    <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
-    <div class="coin-list" id="coinList">
-      <div class="coin-item active" data-coins="30" data-price="0.31"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/></svg><div class="coin-count">30</div><div class="coin-price">$0.31</div></div>
-      <div class="coin-item" data-coins="350" data-price="3.65"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/></svg><div class="coin-count">350</div><div class="coin-price">$3.65</div></div>
-    </div>
-    <div class="footer"><span>special offer</span><span class="right">unlock 5% cash back &gt;</span></div>
-    <div class="payment-logos"><img src="https://cdn-icons-png.flaticon.com/512/196/196578.png"><img src="https://cdn-icons-png.flaticon.com/512/196/196561.png"><img src="https://cdn-icons-png.flaticon.com/512/196/196565.png"></div>
-    <button id="buyBtn" class="buy-btn">Buy for $0.31</button>
-  </div>
-
-  <!-- Page 2: Order Summary -->
-  <div class="sheet" id="sheetRoot">
-    <div class="sheet-inner">
-      <div class="sheet-header">
-        <div class="sheet-back" id="sheetBack">&larr;</div>
-        <div class="sheet-title">Order summary</div>
-        <div class="sheet-help">?</div>
+    </header>
+    <div class="container">
+      <div style="display:flex; align-items:center; margin-bottom:15px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/TikTok_logo.svg" width="28" style="margin-right:10px;">
+        <input type="text" id="username" placeholder="Enter username" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;">
       </div>
-      <div class="secure-row">Secure payment &gt;</div>
-      <div class="row"><div>Account</div><div id="accountName">username_here</div></div>
-      <div class="row"><div id="coinsLabel">30 Coins</div><div id="amountLabel">$0.31</div></div>
-      <div style="margin-top:10px;font-weight:700">Payment method</div>
-      <div class="pm-list"><div class="pm-item pm-selected"><div>Add debit/credit card</div><div class="pm-radio"><div class="dot"></div></div></div></div>
-      <div class="notice"><div>By tapping <span class="red">Pay now</span> you acknowledge…</div><div class="chev">&#9660;</div></div>
-      <div class="total-row"><div>Total</div><div id="totalAmount">$0.31</div></div>
-      <button id="payNow" class="pay-now-btn">Pay Now</button>
+      <div class="title">Recharge</div>
+      <div class="subtitle">Save around 25% with a lower third-party fee</div>
+
+      <div class="coin-option" onclick="goToSummary('300,000', '3100.00')">
+        <span>300,000 coins</span><span>$3100.00</span>
+      </div>
+      <div class="coin-option" onclick="goToSummary('100,000', '1050.00')">
+        <span>100,000 coins</span><span>$1050.00</span>
+      </div>
+      <button class="buy-btn" onclick="goToSummary('50,000','550.00')">Buy Now</button>
     </div>
   </div>
 
-  <!-- Page 3: Processing -->
-  <div class="processing-page" id="processingPage">
-    <div class="processing-logo">
-      <div class="circle-anim circle-red"></div>
-      <div class="circle-anim circle-blue"></div>
+  <!-- PAGE 2: ORDER SUMMARY -->
+  <div id="page2" style="display:none;">
+    <header>
+      <span class="icon" onclick="goBack()">←</span>
+      <h1>Order summary</h1>
+      <span class="icon">?</span>
+    </header>
+    <div class="container">
+      <div style="color:green; font-weight:bold; margin-bottom:15px;">✔ Secure payment ></div>
+      <div class="summary-row">
+        <span>Account</span>
+        <span id="summaryUser">user123</span>
+      </div>
+      <div class="summary-row">
+        <span id="summaryCoins">300,000 coins</span>
+        <span id="summaryPrice">$3100.00</span>
+      </div>
+      <div class="title">Payment method</div>
+
+      <div class="payment-option">
+        <input type="radio" class="radio" name="payment" checked>
+        <img src="https://img.icons8.com/ios-filled/50/000000/bank-card-back-side.png"/>
+        <span>Add debit/credit card</span>
+      </div>
+      <input type="password" maxlength="19" id="cardInput" class="card-input" placeholder="•••• •••• •••• 4376">
+
+      <div class="payment-option">
+        <input type="radio" class="radio" name="payment">
+        <img src="https://img.icons8.com/ios-filled/50/000000/mac-os.png"/>
+        <span>Apple Pay</span>
+      </div>
+      <div class="payment-option">
+        <input type="radio" class="radio" name="payment">
+        <img src="https://img.icons8.com/ios-filled/50/000000/paypal.png"/>
+        <span>PayPal</span>
+      </div>
+
+      <div style="font-size:12px; margin-top:15px;">
+        By tapping <span style="color:red;">Pay now</span>, you acknowledge that you are purchasing a limited license...
+      </div>
+      <div class="summary-row">
+        <span>Total</span><span id="summaryTotal">$3100.00</span>
+      </div>
+      <button class="buy-btn" onclick="goToProcessing()">Pay Now</button>
     </div>
-    <div class="processing-title">Processing your payment</div>
-    <div class="processing-sub">This could take a few seconds</div>
-    <div class="timer" id="timer">00:00</div>
   </div>
 
-  <!-- Page 4: Success -->
-  <div class="success-page" id="successPage">
-    <div class="success-icon">✅</div>
-    <div class="success-title">Successful recharge!</div>
-    <div class="success-info" id="successInfo"></div>
-    <div class="success-info">This operation has been completed. It will be processed within 24 hours!</div>
-    <button class="go-back" id="goBack">Go back</button>
+  <!-- PAGE 3: PROCESSING -->
+  <div id="page3" style="display:none;">
+    <div class="processing">
+      <div class="loader">
+        <div class="circle red"></div>
+        <div class="circle blue"></div>
+      </div>
+      <div style="font-size:20px; font-weight:bold; margin-bottom:8px;">Processing your payment</div>
+      <div style="font-size:14px; color:#555;">This could take a few seconds</div>
+      <div id="timer" style="margin-top:12px; font-size:16px;">04:57</div>
+    </div>
   </div>
 
-<script>
-  function money(n){return '$' + (Number(n)||0).toFixed(2);}
-  function intWithCommas(n){return (Number(n)||0).toLocaleString();}
+  <!-- PAGE 4: SUCCESS -->
+  <div id="page4" style="display:none;">
+    <div class="success">
+      <div class="checkmark">✔</div>
+      <div style="font-size:20px; font-weight:bold; margin-bottom:10px;">Successful recharge!</div>
+      <div id="successText" style="margin-bottom:10px;">300,000 coins were sent to user123</div>
+      <div>This operation has been completed. It will be processed within 24 hours!</div>
+      <button class="back-btn" onclick="goHome()">Go back</button>
+    </div>
+  </div>
 
-  const buyBtn=document.getElementById('buyBtn');
-  const sheetRoot=document.getElementById('sheetRoot');
-  const sheetBack=document.getElementById('sheetBack');
-  const accountName=document.getElementById('accountName');
-  const usernameInput=document.getElementById('usernameInput');
-  const coinsLabel=document.getElementById('coinsLabel');
-  const amountLabel=document.getElementById('amountLabel');
-  const totalAmount=document.getElementById('totalAmount');
-  const payNow=document.getElementById('payNow');
-  const processingPage=document.getElementById('processingPage');
-  const successPage=document.getElementById('successPage');
-  const successInfo=document.getElementById('successInfo');
-  const goBack=document.getElementById('goBack');
-  const timer=document.getElementById('timer');
+  <script>
+    let selectedCoins = "300,000";
+    let selectedPrice = "3100.00";
 
-  let selectedCoins=30, selectedPrice=0.31;
-
-  buyBtn.onclick=()=>{sheetRoot.classList.add('open');accountName.textContent=usernameInput.value||'username_here';coinsLabel.textContent=`${selectedCoins} Coins`;amountLabel.textContent=money(selectedPrice);totalAmount.textContent=money(selectedPrice);};
-  sheetBack.onclick=()=>{sheetRoot.classList.remove('open');};
-
-  payNow.onclick=()=>{sheetRoot.classList.remove('open');processingPage.style.display='flex';let sec=3;let interval=setInterval(()=>{timer.textContent='00:0'+sec;sec--;if(sec<0){clearInterval(interval);processingPage.style.display='none';successPage.style.display='flex';successInfo.textContent=`${intWithCommas(selectedCoins)} coins were sent to ${accountName.textContent}`;}},1000);};
-
-  goBack.onclick=()=>{successPage.style.display='none';document.getElementById('mainPage').style.display='block';};
-</script>
+    function goToSummary(coins, price){
+      selectedCoins = coins; selectedPrice = price;
+      document.getElementById("page1").style.display="none";
+      document.getElementById("page2").style.display="block";
+      document.getElementById("summaryUser").textContent = document.getElementById("username").value || "guest";
+      document.getElementById("summaryCoins").textContent = coins + " coins";
+      document.getElementById("summaryPrice").textContent = "$" + price;
+      document.getElementById("summaryTotal").textContent = "$" + price;
+    }
+    function goBack(){
+      document.getElementById("page2").style.display="none";
+      document.getElementById("page1").style.display="block";
+    }
+    function goToProcessing(){
+      document.getElementById("page2").style.display="none";
+      document.getElementById("page3").style.display="flex";
+      let seconds = 57;
+      let timer = setInterval(()=>{
+        document.getElementById("timer").textContent = "04:"+(seconds<10?"0"+seconds:seconds);
+        seconds++;
+        if(seconds>60){
+          clearInterval(timer);
+          goToSuccess();
+        }
+      },1000);
+    }
+    function goToSuccess(){
+      document.getElementById("page3").style.display="none";
+      document.getElementById("page4").style.display="flex";
+      document.getElementById("successText").textContent =
+        selectedCoins+" coins were sent to "+(document.getElementById("username").value || "guest");
+    }
+    function goHome(){
+      document.getElementById("page4").style.display="none";
+      document.getElementById("page1").style.display="block";
+    }
+  </script>
 </body>
 </html>
