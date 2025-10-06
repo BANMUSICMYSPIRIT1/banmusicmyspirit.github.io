@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Get Coins</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #fff; margin: 0; padding: 0; }
-    .container { max-width: 400px; margin: 18px auto; padding: 15px; border: 1px solid #ddd; border-radius: 10px; }
+    body { font-family: Arial, sans-serif; background:#fff; margin:0; padding:0; }
+    .container { max-width:400px; margin:18px auto; padding:15px; border:1px solid #ddd; border-radius:10px; }
+
+    /* Hide sections */
+    .hidden { display:none; }
 
     /* Header */
     .header { display:flex; justify-content:center; align-items:center; font-weight:900; font-size:20px; position:relative; }
@@ -24,46 +27,36 @@
 
     /* Coin grid */
     .coin-list { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
-    .coin-item {
-      border:1px solid #ddd; border-radius:8px; text-align:center;
-      padding:12px 8px; font-size:14px; cursor:pointer; transition: all 0.15s ease-in-out;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; user-select:none;
-    }
-
-    /* svg sizing */
-    .coin-item svg { width:36px; height:36px; margin-bottom:8px; display:block; }
-
-    /* coin text styling: count bolder than price */
-    .coin-count { font-size:18px; font-weight:800; line-height:1; }
+    .coin-item { border:1px solid #ddd; border-radius:8px; text-align:center; padding:12px 8px; font-size:14px; cursor:pointer; transition:all 0.15s; display:flex; flex-direction:column; align-items:center; user-select:none; }
+    .coin-item svg { width:36px; height:36px; margin-bottom:8px; }
+    .coin-count { font-size:18px; font-weight:800; }
     .coin-price { font-size:13px; color:#444; margin-top:6px; font-weight:500; }
+    .coin-item.active { border:2px solid #e02020; background:#fff0f0; }
 
-    .coin-item.custom .coin-count { margin-top:2px; }
-    .coin-item input { width:72%; text-align:center; border:none; outline:none; font-size:14px; margin-top:8px; padding:6px 4px; border-radius:6px; background:#fff; box-shadow:inset 0 0 0 1px #eee; }
+    .coin-item.custom input { width:72%; text-align:center; border:none; outline:none; font-size:14px; margin-top:8px; padding:6px 4px; border-radius:6px; background:#fff; box-shadow:inset 0 0 0 1px #eee; }
 
-    /* selected */
-    .coin-item.active { border:2px solid #e02020; background:#fff0f0; box-shadow:0 1px 6px rgba(224,32,32,0.06); }
-
-    /* Invite / mobile / footer */
+    /* Invite & footer */
     .invite { margin:18px 0 6px; }
-    .invite img { width:24px; margin-right:10px; vertical-align:middle; }
+    .invite img { width:23px; margin-right:8px; vertical-align:middle; }
     .invite p { margin:0; font-size:14px; display:flex; align-items:center; gap:8px; }
-    .invite small { font-size:12px; color:gray; display:block; margin-top:4px; }
-
-    .add-mobile { margin:14px 0; display:flex; align-items:center; font-size:13px; gap:10px; }
-    .add-mobile img { width:22px; }
+    .invite small { font-size:12px; color:gray; margin-top:4px; display:block; }
 
     .footer { display:flex; justify-content:space-between; align-items:center; font-size:13px; margin-top:16px; }
     .footer .right { color:#b22222; cursor:pointer; }
     .payment-logos { margin:12px 0; display:flex; justify-content:center; gap:14px; }
     .payment-logos img { width:40px; }
 
-    .buy-btn { display:block; width:100%; padding:14px; text-align:center; background:#e02020; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer; margin-top:8px; }
-    #customPrice { margin-top:6px; font-weight:700; }
+    .buy-btn, .pay-btn { display:block; width:100%; padding:14px; text-align:center; background:#e02020; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer; margin-top:8px; }
+
+    /* Checkout */
+    .summary { margin:20px 0; font-size:16px; font-weight:600; }
+    .payment-methods { margin:20px 0; }
+    .payment-methods label { display:block; margin:8px 0; font-size:14px; cursor:pointer; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
+  <!-- Page 1: Get Coins -->
+  <div class="container" id="coinsPage">
     <div class="header">
       <span>Get Coins</span>
       <div class="header-icons">
@@ -72,101 +65,43 @@
       </div>
     </div>
 
-    <!-- Username -->
     <div class="username-bar">
       <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok Logo">
-      <input type="text" placeholder="Enter username" aria-label="Enter username">
+      <input type="text" placeholder="Enter username">
     </div>
 
-    <!-- Recharge -->
     <div class="recharge-title">Recharge</div>
     <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
 
-    <!-- Coin list: every tile includes the TikTok coin SVG -->
     <div class="coin-list">
-      <div class="coin-item" data-coins="30" data-price="0.31">
-        <!-- TikTok coin SVG -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
+      <div class="coin-item active" data-coins="30" data-price="0.31">
         <div class="coin-count">30</div>
         <div class="coin-price">$0.31</div>
       </div>
-
       <div class="coin-item" data-coins="350" data-price="3.65">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
         <div class="coin-count">350</div>
         <div class="coin-price">$3.65</div>
       </div>
-
       <div class="coin-item" data-coins="700" data-price="7.25">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
         <div class="coin-count">700</div>
         <div class="coin-price">$7.25</div>
       </div>
-
       <div class="coin-item" data-coins="1400" data-price="14.49">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
         <div class="coin-count">1400</div>
         <div class="coin-price">$14.49</div>
       </div>
-
-      <div class="coin-item" data-coins="3500" data-price="36.20">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">3500</div>
-        <div class="coin-price">$36.20</div>
-      </div>
-
-      <!-- Custom -->
       <div class="coin-item custom">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
         <div class="coin-count">Custom</div>
-        <input type="number" id="customCoins" placeholder="Coins" min="1" aria-label="Custom coin amount">
+        <input type="number" id="customCoins" placeholder="Coins" min="1">
         <div id="customPrice"></div>
       </div>
     </div>
 
-    <!-- Invite -->
     <div class="invite">
       <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="invite"> Invite & Get Rewards</p>
       <small>check out this new feature!</small>
     </div>
 
-    <!-- Add to mobile -->
-    <div class="add-mobile">
-      <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="file icon">
-      <span>Add this page to the mobile desktop for easy access with just one click</span>
-    </div>
-
-    <!-- Footer -->
     <div class="footer">
       <span>special offer</span>
       <span class="right">unlock 5% cash back &gt;</span>
@@ -179,7 +114,20 @@
       <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt="PayPal">
     </div>
 
-    <button class="buy-btn" id="buyBtn" aria-live="polite">Buy for $0.31</button>
+    <button class="buy-btn" id="buyBtn">Buy for $0.31</button>
+  </div>
+
+  <!-- Page 2: Checkout -->
+  <div class="container hidden" id="checkoutPage">
+    <h2>Checkout</h2>
+    <div class="summary" id="orderSummary"></div>
+    <div class="payment-methods">
+      <p>Select Payment Method:</p>
+      <label><input type="radio" name="payment" checked> Visa / MasterCard</label>
+      <label><input type="radio" name="payment"> PayPal</label>
+      <label><input type="radio" name="payment"> Bank Transfer</label>
+    </div>
+    <button class="pay-btn" id="payBtn">Pay Now</button>
   </div>
 
   <script>
@@ -188,22 +136,19 @@
     const customInput = document.getElementById('customCoins');
     const customPrice = document.getElementById('customPrice');
 
+    let selectedCoins = 30;
+    let selectedPrice = 0.31;
+
     function setBuyPrice(value) {
       const n = Number(value) || 0;
       buyBtn.textContent = `Buy for $${n.toFixed(2)}`;
     }
 
-    // Click behavior
     coinItems.forEach(item => {
       item.addEventListener('click', (e) => {
-        // If custom item clicked and user clicked the input, ignore here
         if (item.classList.contains('custom') && e.target === customInput) return;
-
-        // mark active
         coinItems.forEach(c => c.classList.remove('active'));
         item.classList.add('active');
-
-        // if custom item clicked (but not input) focus input and use its value if present
         if (item.classList.contains('custom')) {
           customInput.focus();
           const val = Number(customInput.value);
@@ -211,36 +156,33 @@
             const price = val * 0.0103333333;
             customPrice.textContent = `$${price.toFixed(2)}`;
             setBuyPrice(price);
+            selectedCoins = val;
+            selectedPrice = price.toFixed(2);
           } else {
-            // if empty, keep default placeholder price or set to 0.00
             setBuyPrice(0.00);
             customPrice.textContent = "";
           }
           return;
         }
-
-        // regular coin: use data-price
-        const price = parseFloat(item.dataset.price);
-        if (!Number.isNaN(price)) {
-          // clear custom input
-          if (customInput) { customInput.value = ""; customPrice.textContent = ""; }
-          setBuyPrice(price);
-        }
+        selectedCoins = item.dataset.coins;
+        selectedPrice = parseFloat(item.dataset.price);
+        if (customInput) { customInput.value = ""; customPrice.textContent = ""; }
+        setBuyPrice(selectedPrice);
       });
     });
 
-    // Custom input handler
     if (customInput) {
       customInput.addEventListener('input', () => {
         coinItems.forEach(c => c.classList.remove('active'));
         const customItem = customInput.closest('.coin-item');
         if (customItem) customItem.classList.add('active');
-
         const coins = Number(customInput.value);
         if (coins > 0) {
-          const price = coins * 0.0103333333; // derived rate (30 ≈ 0.31)
+          const price = coins * 0.0103333333;
           customPrice.textContent = `$${price.toFixed(2)}`;
           setBuyPrice(price);
+          selectedCoins = coins;
+          selectedPrice = price.toFixed(2);
         } else {
           customPrice.textContent = "";
           setBuyPrice(0.00);
@@ -248,8 +190,12 @@
       });
     }
 
-    // initialize default
-    setBuyPrice(0.31);
+    buyBtn.addEventListener('click', () => {
+      document.getElementById("coinsPage").classList.add("hidden");
+      document.getElementById("checkoutPage").classList.remove("hidden");
+      document.getElementById("orderSummary").textContent = `You are buying ${selectedCoins} Coins for $${selectedPrice}`;
+      document.getElementById("payBtn").textContent = `Pay $${selectedPrice}`;
+    });
   </script>
 </body>
 </html>
