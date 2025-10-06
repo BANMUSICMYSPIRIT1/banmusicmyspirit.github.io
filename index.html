@@ -104,77 +104,12 @@
       background: #ffe6e6;
     }
 
-    .coin-item svg {
-      width: 22px;
-      vertical-align: middle;
-      margin-right: 5px;
-    }
-
     .coin-item input {
       width: 60%;
       text-align: center;
       border: none;
       outline: none;
       font-size: 14px;
-    }
-
-    /* Invite & Get Rewards */
-    .invite {
-      margin: 20px 0;
-    }
-
-    .invite img {
-      width: 24px;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
-
-    .invite p {
-      margin: 0;
-      font-size: 14px;
-    }
-
-    .invite small {
-      font-size: 12px;
-      color: gray;
-    }
-
-    /* Add to mobile desktop */
-    .add-mobile {
-      margin: 20px 0;
-      display: flex;
-      align-items: center;
-      font-size: 13px;
-      gap: 10px;
-    }
-
-    .add-mobile img {
-      width: 22px;
-    }
-
-    /* Footer */
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      margin-top: 20px;
-    }
-
-    .footer .right {
-      color: #b22222;
-      cursor: pointer;
-    }
-
-    .payment-logos {
-      margin: 15px 0;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .payment-logos img {
-      width: 40px;
     }
 
     /* Buy Button */
@@ -189,6 +124,23 @@
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 20px;
+    }
+
+    /* Overlay Background (for outside click) */
+    .overlay-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: transparent; /* no dimming */
+      display: none;
+      z-index: 999;
+    }
+
+    .overlay-bg.active {
+      display: block;
     }
 
     /* Overlay (Order Summary) */
@@ -313,7 +265,6 @@
       font-size: 16px;
       cursor: pointer;
     }
-
   </style>
 </head>
 <body>
@@ -329,139 +280,4 @@
 
     <!-- Username bar -->
     <div class="username-bar">
-      <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok Logo">
-      <input type="text" id="username" placeholder="Enter username">
-    </div>
-
-    <!-- Recharge -->
-    <div class="recharge-title">Recharge</div>
-    <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
-
-    <div class="coin-list">
-      <div class="coin-item" data-coins="30000" data-price="310.00">30,000 Coins<br>$310.00</div>
-      <div class="coin-item" data-coins="300000" data-price="3120.00">300,000 Coins<br>$3120.00</div>
-      <div class="coin-item custom">
-        Custom<br>
-        <input type="number" id="customCoins" placeholder="Coins">
-        <div id="customPrice"></div>
-      </div>
-    </div>
-
-    <!-- Buy Button -->
-    <button class="buy-btn" id="buyBtn">Buy for $0.00</button>
-  </div>
-
-  <!-- Overlay -->
-  <div class="overlay" id="overlay">
-    <div class="overlay-header">
-      <span class="back" id="backBtn">←</span>
-      Order Summary
-      <span class="help">?</span>
-    </div>
-    <div class="secure">✔ Secure payment ></div>
-    <div class="summary-row">
-      <span>Account</span>
-      <span id="summaryUsername">-</span>
-    </div>
-    <div class="summary-row">
-      <span id="summaryCoins">0 Coins</span>
-      <span id="summaryPrice">$0.00</span>
-    </div>
-    <div class="payment-method">
-      <div class="method" data-method="card">
-        <div class="circle-select"></div>
-        <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Card">
-        Add debit/credit card
-      </div>
-      <div class="method" data-method="apple">
-        <div class="circle-select"></div>
-        <img src="https://developer.apple.com/design/human-interface-guidelines/apple-pay/images/apple-pay-logo.png" alt="Apple Pay">
-        Apple Pay
-      </div>
-      <div class="method" data-method="paypal">
-        <div class="circle-select"></div>
-        <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal">
-        PayPal
-      </div>
-    </div>
-    <div class="notice">By tapping <span>Pay now</span> to make a purchase, you acknowledge that you are purchasing a limited license to access this ⬇</div>
-    <div class="total">
-      <span>Total</span>
-      <span id="summaryTotal">$0.00</span>
-    </div>
-    <button class="pay-now-btn">Pay Now</button>
-  </div>
-
-  <script>
-    const coinItems = document.querySelectorAll('.coin-item');
-    const buyBtn = document.getElementById('buyBtn');
-    const customInput = document.getElementById('customCoins');
-    const customPrice = document.getElementById('customPrice');
-    const overlay = document.getElementById('overlay');
-    const backBtn = document.getElementById('backBtn');
-    const usernameInput = document.getElementById('username');
-
-    const summaryUsername = document.getElementById('summaryUsername');
-    const summaryCoins = document.getElementById('summaryCoins');
-    const summaryPrice = document.getElementById('summaryPrice');
-    const summaryTotal = document.getElementById('summaryTotal');
-
-    let selectedCoins = 0;
-    let selectedPrice = 0;
-
-    // Select coin items
-    coinItems.forEach(item => {
-      item.addEventListener('click', () => {
-        coinItems.forEach(c => c.classList.remove('active'));
-        item.classList.add('active');
-        let coins = item.getAttribute('data-coins');
-        let price = item.getAttribute('data-price');
-        if (coins && price) {
-          selectedCoins = coins;
-          selectedPrice = price;
-          buyBtn.textContent = `Buy for $${price}`;
-        }
-      });
-    });
-
-    // Custom input
-    customInput.addEventListener('input', () => {
-      coinItems.forEach(c => c.classList.remove('active'));
-      customInput.closest('.coin-item').classList.add('active');
-      let coins = customInput.value;
-      if (coins) {
-        let price = (coins * 0.0103).toFixed(2);
-        selectedCoins = coins;
-        selectedPrice = price;
-        customPrice.textContent = `$${price}`;
-        buyBtn.textContent = `Buy for $${price}`;
-      } else {
-        customPrice.textContent = "";
-      }
-    });
-
-    // Open overlay
-    buyBtn.addEventListener('click', () => {
-      summaryUsername.textContent = usernameInput.value || "Guest";
-      summaryCoins.textContent = `${selectedCoins} Coins`;
-      summaryPrice.textContent = `$${selectedPrice}`;
-      summaryTotal.textContent = `$${selectedPrice}`;
-      overlay.classList.add('active');
-    });
-
-    // Close overlay
-    backBtn.addEventListener('click', () => {
-      overlay.classList.remove('active');
-    });
-
-    // Payment method selection
-    const methods = document.querySelectorAll('.method');
-    methods.forEach(m => {
-      m.addEventListener('click', () => {
-        document.querySelectorAll('.circle-select').forEach(c => c.classList.remove('active'));
-        m.querySelector('.circle-select').classList.add('active');
-      });
-    });
-  </script>
-</body>
-</html>
+      <img src="https://upload.wikimedia.org/wiki
