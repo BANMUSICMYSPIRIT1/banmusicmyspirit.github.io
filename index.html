@@ -301,8 +301,12 @@
   <!-- SUCCESS full screen page -->
   <div id="successFull" class="success-full" aria-hidden="true" role="status" aria-live="polite">
     <div class="success-box" role="region" aria-label="Successful recharge">
-      <!-- base64-encoded SVG (success logo) -->
-      <img id="successLogo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiB2aWV3Qm94PSIwIDAgMTYwIDE2MCI+PHJlY3Qgd2lkdGg9IjE2MCIgaGVpZ2h0PSIxNjAiIHJ4PSIyNCIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjgwIiBjeT0iNjQiIHI9IjQ0IiBmaWxsPSIjMTZhMzRhIi8+PHBhdGggZD0iTTYgMTA0YTEgMSAwIDAgMC0xLjg2Ljg5YzIuOTItNS40MSA1Ljg4LTEwLjE0IDcuODYtMTQuMzRhMDMuOTYgMC4wMSAwIDAgMS41OTUtMS4wNjYgMTYuODkgMTYuODkgMCAwIDEgMS45NjkgMy4xMWEyNC4xIDI0LjEgMCAwIDAgMy4wNTkgMTjavascriptaCIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" alt="Success" width="120" height="120" style="border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.08)" />
+      <!-- inline green check SVG (flat minimal) -->
+      <svg width="128" height="128" viewBox="0 0 64 64" aria-hidden="true" role="img" style="border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.08);">
+        <rect width="64" height="64" rx="12" fill="#ffffff" />
+        <circle cx="32" cy="32" r="26" fill="#16a34a" />
+        <path d="M46 24.5c0 .5-.2.9-.6 1.2L28.4 40.7c-.6.5-1.4.5-2 .1l-7.4-5.5c-.7-.5-.8-1.5-.3-2.2s1.5-.8 2.2-.3l6.6 4.9L44.1 23c.6-.4 1.4-.3 1.9.5.1.2.1.5.0.9z" fill="#fff"/>
+      </svg>
 
       <div class="success-title">Successful recharge!</div>
       <div id="successSummary" class="success-desc">300,000 Coins were sent to username_here</div>
@@ -452,10 +456,8 @@
   // show success full-screen (cuts instantly from processing)
   function showSuccessFull(){
     const user = (usernameInput.value || '').trim() || 'username_here';
-    // use selectedCoins for the summary (format with commas)
     successSummary.textContent = `${intWithCommas(selectedCoins)} Coins were sent to ${user}`;
     successFull.classList.add('show'); successFull.setAttribute('aria-hidden','false');
-    // optionally, set focus to Go back button
     successGoBack.focus();
   }
 
@@ -463,7 +465,7 @@
   function returnToMain(){
     successFull.classList.remove('show');
     successFull.setAttribute('aria-hidden','true');
-    // reset modal etc. We'll just keep selections so user can continue
+    // keep current selection on main page so user can continue
   }
   successGoBack.addEventListener('click', returnToMain);
 
