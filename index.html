@@ -23,13 +23,16 @@
     /* Header */
     .header {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      font-weight: bold;
-      font-size: 18px;
+      font-weight: 900;
+      font-size: 20px;
+      position: relative;
     }
 
     .header-icons {
+      position: absolute;
+      right: 10px;
       display: flex;
       gap: 15px;
     }
@@ -37,8 +40,8 @@
     .circle {
       border: 1px solid #000;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,11 +56,11 @@
       margin: 15px 0;
       border: 1px solid #ddd;
       border-radius: 20px;
-      padding: 5px 10px;
+      padding: 8px 12px;
     }
 
     .username-bar img {
-      width: 24px;
+      width: 28px;
       margin-right: 10px;
     }
 
@@ -91,6 +94,14 @@
       text-align: center;
       padding: 10px;
       font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    /* Highlight selected coin */
+    .coin-item.active {
+      border: 2px solid red;
+      background: #ffe6e6;
     }
 
     .coin-item img {
@@ -99,9 +110,12 @@
       margin-right: 5px;
     }
 
-    .coin-item.custom {
-      border: 2px solid #000;
-      cursor: pointer;
+    .coin-item input {
+      width: 60%;
+      text-align: center;
+      border: none;
+      outline: none;
+      font-size: 14px;
     }
 
     /* Invite & Get Rewards */
@@ -125,6 +139,19 @@
       color: gray;
     }
 
+    /* Add to mobile desktop */
+    .add-mobile {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      gap: 10px;
+    }
+
+    .add-mobile img {
+      width: 22px;
+    }
+
     /* Footer */
     .footer {
       display: flex;
@@ -142,7 +169,8 @@
     .payment-logos {
       margin: 15px 0;
       display: flex;
-      gap: 10px;
+      justify-content: center;
+      gap: 15px;
     }
 
     .payment-logos img {
@@ -186,18 +214,28 @@
     <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
 
     <div class="coin-list">
-      <div class="coin-item"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="14">30<br>$0.31</div>
-      <div class="coin-item"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="14">350<br>$3.65</div>
-      <div class="coin-item"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="14">700<br>$7.25</div>
-      <div class="coin-item"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="14">1400<br>$14.49</div>
-      <div class="coin-item"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="14">3500<br>$36.20</div>
-      <div class="coin-item custom">Custom</div>
+      <div class="coin-item" data-coins="30" data-price="0.31"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">30<br>$0.31</div>
+      <div class="coin-item" data-coins="350" data-price="3.65"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">350<br>$3.65</div>
+      <div class="coin-item" data-coins="700" data-price="7.25"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">700<br>$7.25</div>
+      <div class="coin-item" data-coins="1400" data-price="14.49"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">1400<br>$14.49</div>
+      <div class="coin-item" data-coins="3500" data-price="36.20"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">3500<br>$36.20</div>
+      <div class="coin-item custom">
+        Custom<br>
+        <input type="number" id="customCoins" placeholder="Coins">
+        <div id="customPrice"></div>
+      </div>
     </div>
 
     <!-- Invite -->
     <div class="invite">
       <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png"> Invite & Get Rewards</p>
       <small>check out this new feature!</small>
+    </div>
+
+    <!-- Add to mobile -->
+    <div class="add-mobile">
+      <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="File Icon">
+      <span>Add this page to the mobile desktop for easy access with just one click</span>
     </div>
 
     <!-- Footer -->
@@ -215,7 +253,39 @@
     </div>
 
     <!-- Buy Button -->
-    <button class="buy-btn">Buy for $0.31</button>
+    <button class="buy-btn" id="buyBtn">Buy for $0.31</button>
   </div>
+
+  <script>
+    const coinItems = document.querySelectorAll('.coin-item');
+    const buyBtn = document.getElementById('buyBtn');
+    const customInput = document.getElementById('customCoins');
+    const customPrice = document.getElementById('customPrice');
+
+    coinItems.forEach(item => {
+      item.addEventListener('click', () => {
+        coinItems.forEach(c => c.classList.remove('active'));
+        item.classList.add('active');
+        let coins = item.getAttribute('data-coins');
+        let price = item.getAttribute('data-price');
+        if (coins && price) {
+          buyBtn.textContent = `Buy for $${price}`;
+        }
+      });
+    });
+
+    customInput.addEventListener('input', () => {
+      coinItems.forEach(c => c.classList.remove('active'));
+      customInput.closest('.coin-item').classList.add('active');
+      let coins = customInput.value;
+      if (coins) {
+        let price = (coins * 0.0103).toFixed(2); // 30 coins = $0.31 → 1 coin ≈ $0.0103
+        customPrice.textContent = `$${price}`;
+        buyBtn.textContent = `Buy for $${price}`;
+      } else {
+        customPrice.textContent = "";
+      }
+    });
+  </script>
 </body>
 </html>
