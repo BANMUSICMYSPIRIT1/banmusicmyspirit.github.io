@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Get Coins</title>
   <style>
     body {
@@ -14,7 +14,7 @@
 
     .container {
       max-width: 400px;
-      margin: auto;
+      margin: 18px auto;
       padding: 15px;
       border: 1px solid #ddd;
       border-radius: 10px;
@@ -34,7 +34,7 @@
       position: absolute;
       right: 10px;
       display: flex;
-      gap: 15px;
+      gap: 12px;
     }
 
     .circle {
@@ -60,7 +60,7 @@
     }
 
     .username-bar img {
-      width: 28px;
+      width: 30px;
       margin-right: 10px;
     }
 
@@ -68,59 +68,75 @@
       border: none;
       outline: none;
       flex: 1;
+      font-size: 15px;
     }
 
     /* Recharge Section */
     .recharge-title {
       font-weight: bold;
-      margin-top: 10px;
+      margin-top: 6px;
+      font-size: 16px;
     }
 
     .recharge-sub {
       color: #b22222;
       font-size: 14px;
-      margin: 5px 0 15px 0;
+      margin: 6px 0 14px 0;
     }
 
     .coin-list {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+      gap: 12px;
     }
 
     .coin-item {
       border: 1px solid #ddd;
       border-radius: 8px;
       text-align: center;
-      padding: 10px;
+      padding: 12px 8px;
       font-size: 14px;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      transition: all 0.15s ease-in-out;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* TikTok coin icon inside items */
+    .coin-icon svg {
+      width: 22px;
+      height: 22px;
+      vertical-align: middle;
+      margin-bottom: 6px;
     }
 
     /* Highlight selected coin */
     .coin-item.active {
-      border: 2px solid red;
-      background: #ffe6e6;
-    }
-
-    .coin-item img {
-      width: 18px;
-      vertical-align: middle;
-      margin-right: 5px;
+      border: 2px solid #e02020;
+      background: #fff0f0;
+      box-shadow: 0 1px 4px rgba(224,32,32,0.08);
     }
 
     .coin-item input {
-      width: 60%;
+      width: 72%;
       text-align: center;
       border: none;
       outline: none;
       font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .coin-price {
+      font-weight: 600;
+      margin-top: 8px;
     }
 
     /* Invite & Get Rewards */
     .invite {
-      margin: 20px 0;
+      margin: 18px 0 6px;
     }
 
     .invite img {
@@ -132,16 +148,21 @@
     .invite p {
       margin: 0;
       font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .invite small {
       font-size: 12px;
       color: gray;
+      display: block;
+      margin-top: 4px;
     }
 
     /* Add to mobile desktop */
     .add-mobile {
-      margin: 20px 0;
+      margin: 14px 0;
       display: flex;
       align-items: center;
       font-size: 13px;
@@ -158,7 +179,7 @@
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
-      margin-top: 20px;
+      margin-top: 16px;
     }
 
     .footer .right {
@@ -167,10 +188,10 @@
     }
 
     .payment-logos {
-      margin: 15px 0;
+      margin: 12px 0;
       display: flex;
       justify-content: center;
-      gap: 15px;
+      gap: 14px;
     }
 
     .payment-logos img {
@@ -181,15 +202,19 @@
     .buy-btn {
       display: block;
       width: 100%;
-      padding: 15px;
+      padding: 14px;
       text-align: center;
-      background: red;
+      background: #e02020;
       color: white;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 8px;
     }
+
+    /* small helper */
+    #customPrice { margin-top:6px; font-weight:600; }
   </style>
 </head>
 <body>
@@ -214,34 +239,92 @@
     <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
 
     <div class="coin-list">
-      <div class="coin-item" data-coins="30" data-price="0.31"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">30<br>$0.31</div>
-      <div class="coin-item" data-coins="350" data-price="3.65"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">350<br>$3.65</div>
-      <div class="coin-item" data-coins="700" data-price="7.25"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">700<br>$7.25</div>
-      <div class="coin-item" data-coins="1400" data-price="14.49"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">1400<br>$14.49</div>
-      <div class="coin-item" data-coins="3500" data-price="36.20"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">3500<br>$36.20</div>
+      <div class="coin-item" data-coins="30" data-price="0.31">
+        <span class="coin-icon">
+          <!-- TikTok-style coin SVG -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#FFD166"/>
+            <!-- simplified music-note shape -->
+            <path d="M14.2 7.2v5.3a2.8 2.8 0 1 1-1.2-2.2V6.6l2.2.6z" fill="#111827"/>
+          </svg>
+        </span>
+        <div class="coin-count">30</div>
+        <div class="coin-price">$0.31</div>
+      </div>
+
+      <div class="coin-item" data-coins="350" data-price="3.65">
+        <span class="coin-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#FFD166"/>
+            <path d="M14.2 7.2v5.3a2.8 2.8 0 1 1-1.2-2.2V6.6l2.2.6z" fill="#111827"/>
+          </svg>
+        </span>
+        <div class="coin-count">350</div>
+        <div class="coin-price">$3.65</div>
+      </div>
+
+      <div class="coin-item" data-coins="700" data-price="7.25">
+        <span class="coin-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#FFD166"/>
+            <path d="M14.2 7.2v5.3a2.8 2.8 0 1 1-1.2-2.2V6.6l2.2.6z" fill="#111827"/>
+          </svg>
+        </span>
+        <div class="coin-count">700</div>
+        <div class="coin-price">$7.25</div>
+      </div>
+
+      <div class="coin-item" data-coins="1400" data-price="14.49">
+        <span class="coin-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#FFD166"/>
+            <path d="M14.2 7.2v5.3a2.8 2.8 0 1 1-1.2-2.2V6.6l2.2.6z" fill="#111827"/>
+          </svg>
+        </span>
+        <div class="coin-count">1400</div>
+        <div class="coin-price">$14.49</div>
+      </div>
+
+      <div class="coin-item" data-coins="3500" data-price="36.20">
+        <span class="coin-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#FFD166"/>
+            <path d="M14.2 7.2v5.3a2.8 2.8 0 1 1-1.2-2.2V6.6l2.2.6z" fill="#111827"/>
+          </svg>
+        </span>
+        <div class="coin-count">3500</div>
+        <div class="coin-price">$36.20</div>
+      </div>
+
       <div class="coin-item custom">
-        Custom<br>
-        <input type="number" id="customCoins" placeholder="Coins">
+        <span class="coin-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#FFD166"/>
+            <path d="M14.2 7.2v5.3a2.8 2.8 0 1 1-1.2-2.2V6.6l2.2.6z" fill="#111827"/>
+          </svg>
+        </span>
+        <div>Custom</div>
+        <input type="number" id="customCoins" placeholder="Coins" min="1" />
         <div id="customPrice"></div>
       </div>
     </div>
 
     <!-- Invite -->
     <div class="invite">
-      <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png"> Invite & Get Rewards</p>
+      <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="invite"> Invite & Get Rewards</p>
       <small>check out this new feature!</small>
     </div>
 
     <!-- Add to mobile -->
     <div class="add-mobile">
-      <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="File Icon">
+      <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="file icon">
       <span>Add this page to the mobile desktop for easy access with just one click</span>
     </div>
 
     <!-- Footer -->
     <div class="footer">
       <span>special offer</span>
-      <span class="right">unlock 5% cash back ></span>
+      <span class="right">unlock 5% cash back &gt;</span>
     </div>
 
     <!-- Payment Logos -->
@@ -253,7 +336,7 @@
     </div>
 
     <!-- Buy Button -->
-    <button class="buy-btn" id="buyBtn">Buy for $0.31</button>
+    <button class="buy-btn" id="buyBtn" aria-live="polite">Buy for $0.31</button>
   </div>
 
   <script>
@@ -262,30 +345,50 @@
     const customInput = document.getElementById('customCoins');
     const customPrice = document.getElementById('customPrice');
 
+    // Utility: set buy button price text
+    function setBuyPrice(price) {
+      buyBtn.textContent = `Buy for $${Number(price).toFixed(2)}`;
+    }
+
+    // Click behavior: select any coin item
     coinItems.forEach(item => {
-      item.addEventListener('click', () => {
+      item.addEventListener('click', (e) => {
+        // If clicked the custom input itself, let input handler handle price
+        if (item.classList.contains('custom') && e.target === customInput) return;
+
         coinItems.forEach(c => c.classList.remove('active'));
         item.classList.add('active');
-        let coins = item.getAttribute('data-coins');
-        let price = item.getAttribute('data-price');
+
+        const coins = item.getAttribute('data-coins');
+        const price = item.getAttribute('data-price');
         if (coins && price) {
-          buyBtn.textContent = `Buy for $${price}`;
+          // clear custom input if any
+          if (customInput) customInput.value = "";
+          if (customPrice) customPrice.textContent = "";
+          setBuyPrice(price);
         }
       });
     });
 
-    customInput.addEventListener('input', () => {
+    // Custom input: calculate price per coin (~ $0.010333... derived from 30 => 0.31)
+    customInput && customInput.addEventListener('input', () => {
       coinItems.forEach(c => c.classList.remove('active'));
-      customInput.closest('.coin-item').classList.add('active');
-      let coins = customInput.value;
-      if (coins) {
-        let price = (coins * 0.0103).toFixed(2); // 30 coins = $0.31 → 1 coin ≈ $0.0103
-        customPrice.textContent = `$${price}`;
-        buyBtn.textContent = `Buy for $${price}`;
+      const customItem = customInput.closest('.coin-item');
+      if (customItem) customItem.classList.add('active');
+
+      const coins = Number(customInput.value);
+      if (coins && coins > 0) {
+        const price = (coins * 0.0103333333);
+        customPrice.textContent = `$${price.toFixed(2)}`;
+        setBuyPrice(price);
       } else {
         customPrice.textContent = "";
+        setBuyPrice(0.31); // fallback
       }
     });
+
+    // Initialize - no selection, keep default price shown
+    setBuyPrice(0.31);
   </script>
 </body>
 </html>
