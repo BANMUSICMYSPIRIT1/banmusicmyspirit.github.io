@@ -6,98 +6,118 @@
 <title>Get Coins — Demo</title>
 <style>
   :root{
-    --tiktok-red:#e02020;
-    --muted:#777;
-    --sheet-bg:#fff;
-    --green:#16a34a;
-    --blue:#1e90ff;
-    --overlay: rgba(0,0,0,0.35);
+    --tiktok-red: #e02020;
+    --muted: #777;
+    --sheet-bg: #fff;
+    --green: #16a34a;
+    --blue: #1e90ff;
   }
 
   /* ---------- base ---------- */
-  html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;}
-  .container{max-width:400px;margin:18px auto;padding:15px;border:1px solid #ddd;border-radius:10px;background:#fff}
+  html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;background:#fafafa}
+  .container{max-width:400px;margin:18px auto;padding:15px;border:1px solid #ddd;border-radius:12px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
 
   /* ---------- header + inputs ---------- */
   .header{display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;position:relative}
   .header-icons{position:absolute;right:10px;display:flex;gap:10px}
-  .circle{border:1px solid #000;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+  .circle{border:1px solid #000;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
 
-  .username-bar{display:flex;align-items:center;margin:14px 0;border:1px solid #ddd;border-radius:20px;padding:8px 12px}
-  .username-bar img{width:30px;margin-right:10px}
-  .username-bar input{border:none;outline:none;flex:1;font-size:15px}
+  .username-bar{display:flex;align-items:center;margin:14px 0;border:1px solid #eee;border-radius:24px;padding:8px 12px;background:#fff}
+  .username-bar img{width:20px;margin-right:10px}
+  .username-bar input{border:none;outline:none;flex:1;font-size:14px;color:#222}
 
-  .recharge-title{font-weight:bold;margin-top:6px;font-size:16px}
-  .recharge-sub{color:#b22222;font-size:14px;margin:6px 0 14px 0}
+  .recharge-title{font-weight:800;margin-top:6px;font-size:16px}
+  .recharge-sub{color:#b22222;font-size:13.5px;margin:6px 0 14px 0}
 
   /* ---------- coin grid ---------- */
   .coin-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
   .coin-item{
-    border:1px solid #ddd;border-radius:8px;text-align:center;padding:12px 8px;font-size:14px;cursor:pointer;transition:all .14s;display:flex;flex-direction:column;align-items:center;user-select:none;
+    border:1px solid #eee;border-radius:10px;text-align:center;padding:14px 8px;font-size:14px;cursor:pointer;transition:all .14s;display:flex;flex-direction:column;align-items:center;user-select:none;background:#fff;
   }
-  .coin-item svg{width:36px;height:36px;margin-bottom:8px;display:block}
-  .coin-count{font-size:18px;font-weight:800;line-height:1}
-  .coin-price{font-size:13px;color:#444;margin-top:6px;font-weight:500}
-  .coin-item.custom input{width:72%;text-align:center;border:none;outline:none;font-size:14px;margin-top:8px;padding:6px 4px;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 1px #eee}
-  .coin-item.active{border:2px solid var(--tiktok-red);background:#fff0f0;box-shadow:0 1px 6px rgba(224,32,32,0.06)}
+  .coin-item svg{width:44px;height:44px;margin-bottom:8px;display:block}
+  .coin-count{font-size:18px;font-weight:900;line-height:1;margin-bottom:4px}
+  .coin-price{font-size:13px;color:#444;margin-top:2px;font-weight:500}
+  .coin-item.custom input{width:72%;text-align:center;border:1px solid #eee;outline:none;font-size:14px;margin-top:8px;padding:8px;border-radius:6px;background:#fff}
+  .coin-item.active{border:2px solid var(--tiktok-red);background:#fff0f0;box-shadow:0 6px 18px rgba(224,32,32,0.06)}
 
-  .invite{margin:18px 0 6px}
-  .invite img{width:23px;margin-right:8px;vertical-align:middle}
-  .invite p{margin:0;font-size:14px;display:flex;align-items:center;gap:8px}
-  .invite small{font-size:12px;color:gray;margin-top:4px;display:block}
+  .invite{margin:16px 0 6px;display:flex;gap:8px;align-items:flex-start}
+  .invite img{width:22px}
+  .invite p{margin:0;font-size:14px}
+  .invite small{font-size:12px;color:#888;margin-top:4px;display:block}
 
   .footer{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:16px}
   .footer .right{color:#b22222;cursor:pointer}
-  .payment-logos{margin:12px 0;display:flex;justify-content:center;gap:14px}
-  .payment-logos img{width:40px}
-  .buy-btn{display:block;width:100%;padding:14px;text-align:center;background:var(--tiktok-red);color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:8px}
+  .payment-logos{margin:12px 0;display:flex;justify-content:center;gap:12px}
+  .payment-logos img{width:36px}
+  .buy-btn{display:block;width:100%;padding:14px;text-align:center;background:var(--tiktok-red);color:white;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin-top:8px;box-shadow:0 6px 18px rgba(224,32,32,0.12)}
 
-  /* ========== Modal (centered popup) ========== */
-  .overlay {
-    position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--overlay);z-index:900;
-    transition:opacity .18s ease;
+  /* ========== Bottom sheet (half-screen) ========== */
+  .sheet {
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    width:100%;
+    max-width:420px;
+    pointer-events:none;
+    z-index:1100;
   }
-  .overlay.show{display:flex;opacity:1}
-  .modal {
-    width:92%;
+
+  .sheet-inner {
+    pointer-events:auto;
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:-120%;
+    width:100%;
     max-width:420px;
     background:var(--sheet-bg);
-    border-radius:14px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.25);
-    transform:translateY(12px);
-    opacity:0;
-    transition:transform .28s cubic-bezier(.2,.9,.2,1),opacity .22s;
-    max-height:86vh;
+    border-top-left-radius:16px;
+    border-top-right-radius:16px;
+    box-shadow:0 -12px 40px rgba(0,0,0,0.18);
+    transition:bottom .28s cubic-bezier(.2,.9,.2,1),opacity .18s ease;
+    padding:18px;
+    height:58vh; /* half-ish */
     overflow:auto;
   }
-  .overlay.show .modal{transform:translateY(0);opacity:1}
 
-  .modal-body{padding:18px}
+  .sheet.open .sheet-inner{bottom:6px}
 
-  /* modal header */
-  .modal-header{display:flex;align-items:center;justify-content:center;position:relative;padding-bottom:6px}
-  .modal-back{position:absolute;left:12px;top:8px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:22px;font-weight:900;padding:6px;border-radius:8px}
-  .modal-title{font-weight:700;font-size:18px}
-  .modal-help{position:absolute;right:12px;top:8px;border:1px solid #ddd;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#333}
+  /* sheet header */
+  .sheet-header{display:flex;align-items:center;justify-content:center;position:relative;padding-bottom:6px}
+  .sheet-back{
+    position:absolute;left:12px;top:8px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:20px;font-weight:900;padding:4px;border-radius:8px;
+  }
+  .sheet-title{font-weight:800;font-size:18px;color:#111}
+  .sheet-help{position:absolute;right:12px;top:8px;border:1px solid #eee;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#333}
 
-  /* secure payment centered text (no logo) */
-  .secure-row{display:flex;justify-content:center;align-items:center;font-size:14px;font-weight:700;color:var(--green);margin:8px 0 14px}
+  /* secure payment centered (no logo) */
+  .secure-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:14px;
+    font-weight:700;
+    color:var(--green);
+    margin:6px 0 12px;
+  }
   .secure-row .arrow{margin-left:8px;color:var(--green);font-weight:700}
 
-  /* rows */
+  /* account/rows */
   .row{display:flex;justify-content:space-between;align-items:center;padding:12px 6px;border-bottom:1px solid #f1f1f1}
   .row .left{color:#333}
   .row .right{color:#222;font-weight:700}
   .subrow{font-size:13px;color:var(--muted);padding:8px 6px 10px 6px}
 
-  /* payment methods */
+  /* Payment method list */
   .pm-list{padding-top:8px}
   .pm-item{display:flex;align-items:center;gap:12px;padding:12px 6px;border-radius:8px;cursor:pointer}
   .pm-item:hover{background:#fafafa}
   .pm-left{display:flex;align-items:center;gap:12px;flex:1}
-  .pm-icon{width:34px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #eee}
+  .pm-icon{width:34px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #f1f1f1}
   .pm-title{font-size:15px;color:#222}
-  .pm-radio{width:18px;height:18px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;position:relative}
+  .pm-radio{width:20px;height:20px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;position:relative}
   .pm-radio .dot{width:10px;height:10px;border-radius:50%;background:transparent;transition:all .12s}
   .pm-selected .pm-radio{border-color:var(--tiktok-red)}
   .pm-selected .pm-radio .dot{background:var(--blue)}
@@ -110,26 +130,27 @@
   .total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 6px;font-size:16px;font-weight:800;border-top:1px solid #eee;margin-top:10px}
   .pay-now-btn{display:block;width:100%;padding:14px;background:var(--tiktok-red);color:#fff;border:none;border-radius:10px;font-size:16px;margin-top:12px;cursor:pointer}
 
-  /* success */
+  /* success overlay */
   .success {
-    position:fixed;left:50%;top:40%;transform:translate(-50%,-40%);background:#fff;padding:18px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);display:none;min-width:280px;text-align:center;z-index:1100;
+    position:fixed;left:50%;top:40%;transform:translate(-50%,-40%);background:#fff;padding:18px;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.18);display:none;min-width:320px;text-align:center;z-index:1300;
   }
   .success.show{display:block}
   .success .ok{margin-top:12px;padding:10px 12px;background:var(--tiktok-red);color:#fff;border:none;border-radius:8px;cursor:pointer}
 
   @media (max-width:420px){
-    .coin-item svg{width:32px;height:32px}
-    .modal{margin:16px}
+    .container{margin:12px 12px}
+    .sheet-inner{height:66vh}
+    .coin-item svg{width:38px;height:38px}
   }
 </style>
 </head>
 <body>
 
-  <!-- MAIN PAGE (kept exactly as requested visually) -->
-  <div class="container" id="mainPage" aria-label="Get Coins page">
+  <!-- MAIN PAGE (kept visually like your requested screenshot) -->
+  <div class="container" id="mainPage" aria-label="Get Coins">
     <div class="header"><span>Get Coins</span>
       <div class="header-icons" aria-hidden="true">
-        <div class="circle">…</div>
+        <div class="circle">⋯</div>
         <div class="circle">?</div>
       </div>
     </div>
@@ -143,83 +164,108 @@
     <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
 
     <div class="coin-list" id="coinList">
-      <!-- Each tile uses the inline SVG coin you requested (gold + multi-layer) -->
+      <!-- Inline SVG coin (vector) used for all tiles -->
       <div class="coin-item active" data-coins="30" data-price="0.31">
-        <!-- inline TikTok coin SVG (vector) -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
+        <!-- stylized coin SVG (vector) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" role="img">
+          <defs>
+            <radialGradient id="g1" cx="30%" cy="25%" r="80%">
+              <stop offset="0%" stop-color="#fff7d9" />
+              <stop offset="45%" stop-color="#ffd966" />
+              <stop offset="100%" stop-color="#f2b636" />
+            </radialGradient>
+          </defs>
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" stroke="#e08a00" stroke-width="3"/>
+          <!-- small spark -->
+          <path d="M48 12c1.6 2.6 3.5 3 6 4-2.2 1.2-3 2.8-4.8 4.2-1.7-1.6-3.4-4.6-7.2-4.2 2.2-1.6 3.7-3.8 6-4z" fill="#ffd88d" opacity="0.9"/>
+          <!-- stylized TikTok "coin mark" -->
+          <g transform="translate(18,14) scale(.9)">
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#b97a13"/>
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#111" opacity="0.12"/>
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#69c9d0" opacity="0.9" transform="translate(-1,1)"/>
+          </g>
         </svg>
         <div class="coin-count">30</div>
         <div class="coin-price">$0.31</div>
       </div>
 
       <div class="coin-item" data-coins="350" data-price="3.65">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" role="img">
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" stroke="#e08a00" stroke-width="3"/>
+          <path d="M44 12c1.6 2.6 3.5 3 6 4-2.2 1.2-3 2.8-4.8 4.2-1.7-1.6-3.4-4.6-7.2-4.2 2.2-1.6 3.7-3.8 6-4z" fill="#ffd88d" opacity="0.9"/>
+          <g transform="translate(18,14) scale(.9)">
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#b97a13"/>
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#69c9d0" opacity="0.9" transform="translate(-1,1)"/>
+          </g>
         </svg>
         <div class="coin-count">350</div>
         <div class="coin-price">$3.65</div>
       </div>
 
       <div class="coin-item" data-coins="700" data-price="7.25">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" role="img">
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" stroke="#e08a00" stroke-width="3"/>
+          <path d="M46 12c1.6 2.6 3.5 3 6 4-2.2 1.2-3 2.8-4.8 4.2-1.7-1.6-3.4-4.6-7.2-4.2 2.2-1.6 3.7-3.8 6-4z" fill="#ffd88d" opacity="0.9"/>
+          <g transform="translate(18,14) scale(.9)">
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#b97a13"/>
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#69c9d0" opacity="0.9" transform="translate(-1,1)"/>
+          </g>
         </svg>
         <div class="coin-count">700</div>
         <div class="coin-price">$7.25</div>
       </div>
 
       <div class="coin-item" data-coins="1400" data-price="14.49">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" role="img">
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" stroke="#e08a00" stroke-width="3"/>
+          <path d="M46 12c1.6 2.6 3.5 3 6 4-2.2 1.2-3 2.8-4.8 4.2-1.7-1.6-3.4-4.6-7.2-4.2 2.2-1.6 3.7-3.8 6-4z" fill="#ffd88d" opacity="0.9"/>
+          <g transform="translate(18,14) scale(.9)">
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#b97a13"/>
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#69c9d0" opacity="0.9" transform="translate(-1,1)"/>
+          </g>
         </svg>
         <div class="coin-count">1400</div>
         <div class="coin-price">$14.49</div>
       </div>
 
       <div class="coin-item" data-coins="3500" data-price="36.20">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" role="img">
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" stroke="#e08a00" stroke-width="3"/>
+          <path d="M46 12c1.6 2.6 3.5 3 6 4-2.2 1.2-3 2.8-4.8 4.2-1.7-1.6-3.4-4.6-7.2-4.2 2.2-1.6 3.7-3.8 6-4z" fill="#ffd88d" opacity="0.9"/>
+          <g transform="translate(18,14) scale(.9)">
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#b97a13"/>
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#69c9d0" opacity="0.9" transform="translate(-1,1)"/>
+          </g>
         </svg>
         <div class="coin-count">3500</div>
         <div class="coin-price">$36.20</div>
       </div>
 
       <div class="coin-item custom">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" role="img">
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" stroke="#e08a00" stroke-width="3"/>
+          <path d="M46 12c1.6 2.6 3.5 3 6 4-2.2 1.2-3 2.8-4.8 4.2-1.7-1.6-3.4-4.6-7.2-4.2 2.2-1.6 3.7-3.8 6-4z" fill="#ffd88d" opacity="0.9"/>
+          <g transform="translate(18,14) scale(.9)">
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#b97a13"/>
+            <path d="M18 4.5v11.2c3 2.2 6 3.4 8.4 3.6v6.6c-3.6-0.2-6.8-1.2-8.6-2.8V38c0 4.8-3.6 8-8 8s-8-3.2-8-8 3.6-8 8-8c1 0 2 .1 2.8.4v4.2c-0.8-0.4-1.6-0.6-2.8-0.6-2.4 0-4 1.6-4 4s1.6 4 4 4 4-1.6 4-4V4.5h6z" fill="#69c9d0" opacity="0.9" transform="translate(-1,1)"/>
+          </g>
         </svg>
         <div class="coin-count">Custom</div>
         <input id="customCoins" type="number" placeholder="Coins" min="1" aria-label="Custom coin amount">
-        <div id="customPrice" style="margin-top:6px;font-weight:700"></div>
+        <div id="customPrice" style="margin-top:8px;font-weight:800;color:#111"></div>
       </div>
     </div>
 
     <div class="invite">
-      <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="invite"> Invite & Get Rewards</p>
-      <small>check out this new feature!</small>
+      <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="invite">
+      <div>
+        <p style="margin:0;font-weight:600">Invite & Get Rewards</p>
+        <small>check out this new feature!</small>
+      </div>
     </div>
 
     <div class="footer">
-      <span>special offer</span>
+      <span style="font-weight:600">special offer</span>
       <span class="right">unlock 5% cash back &gt;</span>
     </div>
 
@@ -233,98 +279,99 @@
     <button id="buyBtn" class="buy-btn" aria-live="polite">Buy for $0.31</button>
   </div>
 
-  <!-- Overlay + Modal (Order Summary) -->
-  <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" role="document" aria-labelledby="orderTitle">
-      <div class="modal-body">
-        <div class="modal-header">
-          <div class="modal-back" id="modalBack" title="Back" aria-label="Back">&larr;</div>
-          <div class="modal-title" id="orderTitle">Order summary</div>
-          <div class="modal-help" title="Help" aria-label="Help">?</div>
-        </div>
-
-        <!-- centered secure payment text (logo removed) -->
-        <div class="secure-row" aria-hidden="true">
-          <div>Secure payment <span class="arrow">&gt;</span></div>
-        </div>
-
-        <!-- account & coins -->
-        <div class="row">
-          <div class="left">Account</div>
-          <div class="right" id="accountName">username_here</div>
-        </div>
-
-        <div class="row" style="border-bottom:1px solid #f1f1f1;">
-          <div class="left" id="coinsLabel">30 Coins</div>
-          <div class="right" id="amountLabel">$0.31</div>
-        </div>
-
-        <!-- payment methods -->
-        <div style="padding-top:12px;font-weight:700;color:#222">Payment method</div>
-        <div class="pm-list" id="pmList" role="listbox" aria-label="Payment methods">
-          <div class="pm-item pm-selected" data-method="card" tabindex="0" role="option" aria-selected="true">
-            <div class="pm-left">
-              <div style="width:28px;font-weight:700;font-size:20px;">+</div>
-              <div class="pm-title">Add debit/credit card</div>
-            </div>
-            <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
-          </div>
-
-          <div class="pm-item" data-method="apple" tabindex="0" role="option" aria-selected="false">
-            <div class="pm-left">
-              <div class="pm-icon" aria-hidden="true" style="font-size:13px;"></div>
-              <div class="pm-title">Apple Pay</div>
-            </div>
-            <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
-          </div>
-
-          <div class="pm-item" data-method="paypal" tabindex="0" role="option" aria-selected="false">
-            <div class="pm-left">
-              <div class="pm-icon" aria-hidden="true" style="font-size:13px;">P</div>
-              <div class="pm-title">PayPal</div>
-            </div>
-            <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
-          </div>
-        </div>
-
-        <div class="notice" role="note" aria-live="polite" style="margin-top:12px">
-          <div style="color:#888;font-size:13px">By tapping <span class="red">Pay now</span> to make a purchase, you acknowledge that you are purchasing a limited license to access this</div>
-          <div class="chev" aria-hidden="true">&#9660;</div>
-        </div>
-
-        <div class="total-row">
-          <div>Total</div><div id="totalAmount">$0.31</div>
-        </div>
-
-        <button id="payNow" class="pay-now-btn">Pay Now</button>
+  <!-- BOTTOM SHEET (half-screen) -->
+  <div class="sheet" id="sheetRoot" aria-hidden="true">
+    <div class="sheet-inner" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-header">
+        <div class="sheet-back" id="sheetBack" title="Back" aria-label="Back">&larr;</div>
+        <div class="sheet-title" id="sheetTitle">Order summary</div>
+        <div class="sheet-help" title="Help" aria-hidden="true">?</div>
       </div>
+
+      <!-- secure payment centered (no logo) -->
+      <div class="secure-row" aria-hidden="true">
+        <div>Secure payment <span class="arrow">&gt;</span></div>
+      </div>
+
+      <!-- account & coins -->
+      <div class="row">
+        <div class="left">Account</div>
+        <div class="right" id="accountName">username_here</div>
+      </div>
+
+      <div class="row" style="border-bottom:1px solid #f1f1f1;">
+        <div class="left" id="coinsLabel">30 Coins</div>
+        <div class="right" id="amountLabel">$0.31</div>
+      </div>
+
+      <!-- payment methods -->
+      <div style="padding-top:10px;font-weight:700;color:#222">Payment method</div>
+      <div class="pm-list" id="pmList" role="listbox" aria-label="Payment methods">
+        <div class="pm-item pm-selected" data-method="card" tabindex="0" role="option" aria-selected="true">
+          <div class="pm-left">
+            <div style="width:28px;font-weight:700;font-size:20px;">+</div>
+            <div class="pm-title">Add debit/credit card</div>
+          </div>
+          <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
+        </div>
+
+        <div class="pm-item" data-method="apple" tabindex="0" role="option" aria-selected="false">
+          <div class="pm-left">
+            <div class="pm-icon" aria-hidden="true" style="font-size:13px;"></div>
+            <div class="pm-title">Apple Pay</div>
+          </div>
+          <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
+        </div>
+
+        <div class="pm-item" data-method="paypal" tabindex="0" role="option" aria-selected="false">
+          <div class="pm-left">
+            <div class="pm-icon" aria-hidden="true" style="font-size:13px;">P</div>
+            <div class="pm-title">PayPal</div>
+          </div>
+          <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
+        </div>
+      </div>
+
+      <div class="notice" role="note" aria-live="polite">
+        <div style="color:#888;font-size:13px">By tapping <span class="red">Pay now</span> to make a purchase, you acknowledge that you are purchasing a limited license to access this</div>
+        <div class="chev" aria-hidden="true">&#9660;</div>
+      </div>
+
+      <div class="total-row">
+        <div>Total</div>
+        <div id="totalAmount">$0.31</div>
+      </div>
+
+      <button id="payNow" class="pay-now-btn">Pay Now</button>
     </div>
   </div>
 
   <!-- success -->
   <div class="success" id="successBox" role="alert" aria-live="assertive">
-    <div style="font-size:22px;margin-bottom:8px">✅ Payment Successful</div>
+    <div style="font-size:20px;margin-bottom:8px">✅ Payment Successful</div>
     <div id="successText" style="color:#444">Your coins will be added to the account shortly.</div>
     <button class="ok" id="successOk">OK</button>
   </div>
 
 <script>
-  // Helpers
+  // helpers
   function money(n){
     const num = Number(n) || 0;
     return '$' + num.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
   }
   function intWithCommas(n){ return (Number(n)||0).toLocaleString(); }
 
-  // Elements
+  // elements
   const coinItems = document.querySelectorAll('.coin-item');
   const buyBtn = document.getElementById('buyBtn');
   const usernameInput = document.getElementById('usernameInput');
   const customInput = document.getElementById('customCoins');
   const customPrice = document.getElementById('customPrice');
 
-  const overlay = document.getElementById('overlay');
-  const modalBack = document.getElementById('modalBack');
+  const sheetRoot = document.getElementById('sheetRoot');
+  const sheetInner = document.querySelector('.sheet-inner');
+  const sheetBack = document.getElementById('sheetBack');
+
   const accountName = document.getElementById('accountName');
   const coinsLabel = document.getElementById('coinsLabel');
   const amountLabel = document.getElementById('amountLabel');
@@ -334,20 +381,18 @@
   const payNow = document.getElementById('payNow');
 
   const successBox = document.getElementById('successBox');
-  const successOk  = document.getElementById('successOk');
+  const successOk = document.getElementById('successOk');
 
-  // State
+  // state
   let selectedCoins = 30;
   let selectedPrice = 0.31;
   let selectedPM = 'card';
 
-  // Set Buy button text
-  function setBuyLabel(amount){
-    buyBtn.textContent = `Buy for ${money(amount)}`;
-  }
+  // label
+  function setBuyLabel(amount){ buyBtn.textContent = `Buy for ${money(amount)}`; }
   setBuyLabel(selectedPrice);
 
-  // Coin selection
+  // coin selection handlers
   coinItems.forEach(item=>{
     item.addEventListener('click', (e)=>{
       if(item.classList.contains('custom') && e.target === customInput) return;
@@ -396,55 +441,49 @@
     });
   }
 
-  // Open modal (order summary)
-  function openModal(){
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
+  // open bottom sheet (half-screen)
+  function openSheet(){
+    sheetRoot.classList.add('open');
+    sheetRoot.setAttribute('aria-hidden','false');
     const user = (usernameInput.value || '').trim() || 'username_here';
     accountName.textContent = user;
     coinsLabel.textContent = `${intWithCommas(selectedCoins)} Coins`;
     amountLabel.textContent = money(selectedPrice);
     totalAmount.textContent = money(selectedPrice);
     payNow.textContent = `Pay ${money(selectedPrice)}`;
-    // focus first payment option for keyboard users
-    const firstPM = pmList.querySelector('.pm-item');
-    if(firstPM) firstPM.focus();
+    // focus first payment method
+    const first = pmList.querySelector('.pm-item');
+    if(first) first.focus();
   }
 
-  function closeModal(){
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
+  function closeSheet(){
+    sheetRoot.classList.remove('open');
+    sheetRoot.setAttribute('aria-hidden','true');
   }
 
-  buyBtn.addEventListener('click', ()=> {
-    openModal();
-  });
+  buyBtn.addEventListener('click', openSheet);
+  sheetBack.addEventListener('click', closeSheet);
 
-  modalBack.addEventListener('click', ()=> {
-    closeModal();
-  });
-
-  // Clicking outside modal closes it (but protect important clicks)
-  overlay.addEventListener('click', (ev)=>{
-    if(ev.target === overlay){
-      closeModal();
+  // click outside sheet to close: listen on document and check if sheet open and click was outside sheet-inner
+  document.addEventListener('click', (ev)=>{
+    if(!sheetRoot.classList.contains('open')) return;
+    const inner = document.querySelector('.sheet-inner');
+    if(!inner.contains(ev.target) && !ev.target.closest('#buyBtn')){
+      // closeSheet(); // left intentionally commented to avoid accidental closes (uncomment if you want)
     }
   });
 
-  // Payment method selection
+  // payment method selection
   pmList.addEventListener('click', (ev)=>{
     const item = ev.target.closest('.pm-item');
     if(!item) return;
-    pmList.querySelectorAll('.pm-item').forEach(i=>{
-      i.classList.remove('pm-selected');
-      i.setAttribute('aria-selected','false');
-    });
+    pmList.querySelectorAll('.pm-item').forEach(i=>{ i.classList.remove('pm-selected'); i.setAttribute('aria-selected','false'); });
     item.classList.add('pm-selected');
     item.setAttribute('aria-selected','true');
     selectedPM = item.dataset.method;
   });
 
-  // Keyboard support
+  // keyboard support for pm items
   pmList.querySelectorAll('.pm-item').forEach(i=>{
     i.addEventListener('keydown', (e)=>{
       if(e.key === 'Enter' || e.key === ' '){
@@ -466,7 +505,7 @@
 
   successOk.addEventListener('click', ()=>{
     successBox.classList.remove('show');
-    closeModal();
+    closeSheet();
   });
 
   // init default selection
