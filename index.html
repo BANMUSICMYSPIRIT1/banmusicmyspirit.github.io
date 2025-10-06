@@ -107,16 +107,23 @@
   .timer{font-family: monospace;font-size:20px;font-weight:700;color:#333;background: rgba(255,255,255,0.5);padding:8px 14px;border-radius:8px}
   .go-back{margin-top:14px;background:var(--tiktok-red);color:#fff;border:none;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 6px 18px rgba(224,32,32,0.12)}
 
-  /* success full-screen */
+  /* success full-screen (smaller logo as requested) */
   .success-full {
     position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#fff;z-index:1300;padding:28px;flex-direction:column;text-align:center;
   }
   .success-full.show{display:flex}
   .success-box{max-width:540px;width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;padding:28px;border-radius:12px}
-  .success-title{font-size:22px;font-weight:900;color:#111}
+  .success-logo {
+    width:56px; height:56px; display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+    background: rgba(22,163,74,0.08);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.04);
+  }
+  .success-logo svg{width:34px;height:34px;display:block}
+  .success-title{font-size:20px;font-weight:900;color:#111}
   .success-desc{font-size:15px;color:#555}
   .success-note{font-size:13px;color:#666}
-  .success-go-back{margin-top:6px;background:var(--tiktok-red);color:#fff;border:none;padding:12px 16px;border-radius:10px;cursor:pointer;font-weight:800}
+  .success-go-back{margin-top:6px;background:var(--tiktok-red);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:800}
 
   @media (max-width:420px){
     .loader{width:92px;height:92px}
@@ -283,8 +290,8 @@
   <div id="processing" class="processing" role="status" aria-hidden="true" aria-live="polite">
     <div class="processing-inner" role="region" aria-label="Processing payment">
       <div class="loader" aria-hidden="true">
-        <div class="circle-base circle-blue" aria-hidden="true" style="width:64px;height:64px;border-radius:50%;"></div>
-        <div class="circle-base circle-red" aria-hidden="true" style="width:64px;height:64px;border-radius:50%;"></div>
+        <div class="circle-base circle-blue" aria-hidden="true" style="width:64px;height:64px;"></div>
+        <div class="circle-base circle-red" aria-hidden="true" style="width:64px;height:64px;"></div>
       </div>
 
       <div>
@@ -298,15 +305,16 @@
     </div>
   </div>
 
-  <!-- SUCCESS full screen page -->
+  <!-- SUCCESS full screen page (smaller logo) -->
   <div id="successFull" class="success-full" aria-hidden="true" role="status" aria-live="polite">
     <div class="success-box" role="region" aria-label="Successful recharge">
-      <!-- inline green check SVG (flat minimal) -->
-      <svg width="128" height="128" viewBox="0 0 64 64" aria-hidden="true" role="img" style="border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.08);">
-        <rect width="64" height="64" rx="12" fill="#ffffff" />
-        <circle cx="32" cy="32" r="26" fill="#16a34a" />
-        <path d="M46 24.5c0 .5-.2.9-.6 1.2L28.4 40.7c-.6.5-1.4.5-2 .1l-7.4-5.5c-.7-.5-.8-1.5-.3-2.2s1.5-.8 2.2-.3l6.6 4.9L44.1 23c.6-.4 1.4-.3 1.9.5.1.2.1.5.0.9z" fill="#fff"/>
-      </svg>
+      <div class="success-logo" aria-hidden="true">
+        <!-- small green circle with white check (SVG inline) -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+          <circle cx="12" cy="12" r="12" fill="#16a34a"/>
+          <path d="M17 9.2c.3.3.3.8 0 1.1l-6 6c-.3.3-.8.3-1.1 0l-3-3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0L10 14.9l5.4-5.4c.3-.3.8-.3 1.1 0z" fill="#fff"/>
+        </svg>
+      </div>
 
       <div class="success-title">Successful recharge!</div>
       <div id="successSummary" class="success-desc">300,000 Coins were sent to username_here</div>
@@ -453,7 +461,7 @@
   }
   processingGoBack.addEventListener('click', hideProcessingAndReturn);
 
-  // show success full-screen (cuts instantly from processing)
+  // show success full-screen (smaller logo)
   function showSuccessFull(){
     const user = (usernameInput.value || '').trim() || 'username_here';
     successSummary.textContent = `${intWithCommas(selectedCoins)} Coins were sent to ${user}`;
@@ -461,15 +469,15 @@
     successGoBack.focus();
   }
 
-  // go back from success: return to main screen and close everything
+  // go back from success: return to main page (skip order summary as requested)
   function returnToMain(){
     successFull.classList.remove('show');
     successFull.setAttribute('aria-hidden','true');
-    // keep current selection on main page so user can continue
+    // stays on main page; selection preserved
   }
   successGoBack.addEventListener('click', returnToMain);
 
-  // make clicking background of processing inert (user must click Go back)
+  // prevent clicking processing background from closing it
   processingEl.addEventListener('click', (ev)=>{ if(ev.target === processingEl) { /* inert */ } });
 
   // init defaults
