@@ -1,600 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Get Coins — Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Coins</title>
 <style>
-  :root{
-    --tiktok-red:#e02020;
-    --muted:#777;
-    --sheet-bg:#fff;
-    --green:#16a34a;
-    --blue:#1e90ff;
-    --overlay: rgba(0,0,0,0.35);
-    --pale-pink: #fff0f2;
+  * {box-sizing: border-box; font-family: Arial, sans-serif;}
+  body, html {margin: 0; padding: 0; height: 100%; background: #fff;}
+
+  /* ==== PAGE WRAPPERS ==== */
+  .page {display: none; height: 100vh; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.3s;}
+  .active {display: flex;}
+
+  /* ==== MAIN PAGE ==== */
+  .main-page {padding: 20px;}
+  .coin-box {border: 1px solid #eee; border-radius: 10px; padding: 10px; width: 150px; text-align: center; margin: 10px auto; cursor: pointer;}
+  .coin-box.selected {border: 2px solid red; background: #fff0f0;}
+  .buy-btn {background: #ff2b2b; color: white; border: none; border-radius: 8px; padding: 15px 30px; font-size: 16px; cursor: pointer; margin-top: 20px;}
+
+  /* ==== PROCESSING PAGE ==== */
+  .processing-page {background: #ffe6ea; text-align: center;}
+  .dots {display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;}
+  .dot {
+    width: 40px; height: 40px; border-radius: 50%;
+    animation: pulse 1s infinite alternate;
+  }
+  .dot.red {background: #ff3b3b;}
+  .dot.blue {background: #00d2d3; animation-delay: 0.5s;}
+  @keyframes pulse {
+    0% {transform: scale(0.8); opacity: 0.7;}
+    100% {transform: scale(1.2); opacity: 1;}
+  }
+  .timer {margin-top: 10px; font-weight: bold; color: #555;}
+  .back-btn {
+    background: #ff2b2b; color: #fff; border: none; border-radius: 8px;
+    padding: 12px 25px; font-size: 15px; margin-top: 30px; cursor: pointer;
   }
 
-  /* ---------- base ---------- */
-  html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;background:#fff;}
-  .container{max-width:400px;margin:18px auto;padding:15px;border:1px solid #ddd;border-radius:10px;background:#fff}
-
-/* ---------- header + inputs ---------- */
-  .header{display:flex;justify-content:center;align-items:center;font-weight:900;font-size:20px;position:relative}
-  .header-icons{position:absolute;right:10px;display:flex;gap:10px}
-  .circle{border:1px solid #000;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
-  .username-bar{display:flex;align-items:center;margin:14px 0;border:1px solid #ddd;border-radius:20px;padding:8px 12px}
-  .username-bar img{width:30px;margin-right:10px}
-  .username-bar input{border:none;outline:none;flex:1;font-size:15px}
-  .recharge-title{font-weight:bold;margin-top:6px;font-size:16px}
-  .recharge-sub{color:#b22222;font-size:14px;margin:6px 0 14px 0}
-
-/* ---------- coin grid ---------- */
-  .coin-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .coin-item{border:1px solid #ddd;border-radius:8px;text-align:center;padding:12px 8px;font-size:14px;cursor:pointer;transition:all .14s;display:flex;flex-direction:column;align-items:center;user-select:none}
-  .coin-item svg{width:36px;height:36px;margin-bottom:8px;display:block}
-  .coin-count{font-size:18px;font-weight:800;line-height:1}
-  .coin-price{font-size:13px;color:#444;margin-top:6px;font-weight:500}
-  .coin-item.custom input{width:72%;text-align:center;border:none;outline:none;font-size:14px;margin-top:8px;padding:6px 4px;border-radius:6px;background:#fff;box-shadow:inset 0 0 0 1px #eee}
-  .coin-item.active{border:2px solid var(--tiktok-red);background:#fff0f0;box-shadow:0 1px 6px rgba(224,32,32,0.06)}
-
-  .invite{margin:18px 0 6px}
-  .invite img{width:23px;margin-right:8px;vertical-align:middle}
-  .invite p{margin:0;font-size:14px;display:flex;align-items:center;gap:8px}
-  .invite small{font-size:12px;color:gray;margin-top:4px;display:block}
-  .footer{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:16px}
-  .footer .right{color:#b22222;cursor:pointer}
-  .payment-logos{margin:12px 0;display:flex;justify-content:center;gap:14px}
-  .payment-logos img{width:40px}
-  .buy-btn{display:block;width:100%;padding:14px;text-align:center;background:var(--tiktok-red);color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-top:8px}
-
-/* ========== Modal (order summary) ========== */
-  .overlay {
-    position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--overlay);z-index:900;transition:opacity .18s ease;
+  /* ==== SUCCESS PAGE ==== */
+  .success-page {background: #fff; text-align: center;}
+  .checkmark {
+    width: 60px; height: 60px; margin-bottom: 20px;
   }
-  .overlay.show{display:flex;opacity:1}
-  .modal {
-    width:100%;
-    max-width:420px;
-    background:var(--sheet-bg);
-    border-top-left-radius:16px;
-    border-top-right-radius:16px;
-    box-shadow:0 -8px 30px rgba(0,0,0,0.12);
-    transform:translateY(12px);
-    opacity:0;
-    transition:transform .28s cubic-bezier(.2,.9,.2,1),opacity .22s;
-    max-height:86vh;
-    overflow:auto;
-  }
-  .overlay.show .modal{transform:translateY(0);opacity:1}
-  .modal-body{padding:18px}
-  .modal-header{display:flex;align-items:center;justify-content:center;position:relative;padding-bottom:6px}
-  .modal-back{position:absolute;left:12px;top:8px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:22px;font-weight:900;padding:6px;border-radius:8px}
-  .modal-title{font-weight:700;font-size:18px}
-  .modal-help{position:absolute;right:12px;top:8px;border:1px solid #ddd;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#333}
-  .secure-row{display:flex;justify-content:center;align-items:center;font-size:14px;font-weight:700;color:var(--green);margin:8px 0 12px}
-  .secure-row .arrow{margin-left:8px;color:var(--green);font-weight:700}
-  .row{display:flex;justify-content:space-between;align-items:center;padding:12px 6px;border-bottom:1px solid #f1f1f1}
-  .row .left{color:#333}
-  .row .right{color:#222;font-weight:700}
-  .pm-list{padding-top:8px}
-  .pm-item{display:flex;align-items:center;gap:12px;padding:12px 6px;border-radius:8px;cursor:pointer}
-  .pm-item:hover{background:#fafafa}
-  .pm-left{display:flex;align-items:center;gap:12px;flex:1}
-  .pm-icon{width:34px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #eee}
-  .pm-title{font-size:15px;color:#222}
-  .pm-radio{width:18px;height:18px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;position:relative}
-  .pm-radio .dot{width:10px;height:10px;border-radius:50%;background:transparent;transition:all .12s}
-  .pm-selected .pm-radio{border-color:var(--tiktok-red)}
-  .pm-selected .pm-radio .dot{background:var(--blue)}
-  .total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 6px;font-size:16px;font-weight:800;border-top:1px solid #eee;margin-top:10px}
-  .pay-now-btn{display:block;width:100%;padding:14px;background:var(--tiktok-red);color:#fff;border:none;border-radius:10px;font-size:16px;margin-top:12px;cursor:pointer}
-
-/* ========== Processing full-screen page ========== */
-  .processing {
-    position:fixed;
-    inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background: linear-gradient(180deg, var(--pale-pink) 0%, #fff6f8 100%);
-    z-index:1200;
-    text-align:center;
-    padding:30px;
-    flex-direction:column;
-  }
-  .processing.show{display:flex}
-  .processing-inner{
-    max-width:520px;
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:18px;
-  }
-
-  /* the two circles animation */
-  .loader {
-    width:120px;
-    height:120px;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .circle-base{
-    position:absolute;
-    width:64px;
-    height:64px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 6px 18px rgba(0,0,0,0.06);
-  }
-  .circle-blue{ background:var(--blue); transform-origin:center; animation:moveBlue 1.2s ease-in-out infinite; z-index:2; }
-  .circle-red { background:var(--tiktok-red); transform-origin:center; animation:moveRed 1.2s ease-in-out infinite; z-index:1; }
-
-  @keyframes moveBlue {
-    0%   { transform: translateX(-6px) scale(1); opacity:1; }
-    50%  { transform: translateX(18px) scale(0.9); opacity:0.9; }
-    100% { transform: translateX(-6px) scale(1); opacity:1; }
-  }
-  @keyframes moveRed {
-    0%   { transform: translateX(6px) scale(1); opacity:1; }
-    50%  { transform: translateX(-18px) scale(0.9); opacity:0.9; }
-    100% { transform: translateX(6px) scale(1); opacity:1; }
-  }
-
-  .processing-title{font-size:20px;font-weight:800;color:#111}
-  .processing-sub{font-size:14px;color:#666}
-  .timer{
-    font-family: monospace;
-    font-size:20px;
-    font-weight:700;
-    color:#333;
-    background: rgba(255,255,255,0.5);
-    padding:8px 14px;
-    border-radius:8px;
-  }
-
-  .go-back {
-    margin-top:14px;
-    background:var(--tiktok-red);
-    color:#fff;
-    border:none;
-    padding:10px 14px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:700;
-    box-shadow:0 6px 18px rgba(224,32,32,0.12);
-  }
-
-  @media (max-width:420px){
-    .loader{width:92px;height:92px}
-    .circle-base{width:48px;height:48px}
-    .processing-title{font-size:18px}
-  }
+  .success-text {font-size: 20px; font-weight: bold; margin-bottom: 8px;}
+  .info-text {color: #555; margin-bottom: 5px;}
 </style>
 </head>
 <body>
 
-  <!-- MAIN PAGE (kept as before) -->
-  <div class="container" id="mainPage" aria-label="Get Coins page">
-    <div class="header"><span>Get Coins</span>
-      <div class="header-icons" aria-hidden="true">
-        <div class="circle">…</div>
-        <div class="circle">?</div>
-      </div>
-    </div>
-
-    <div class="username-bar">
-      <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok logo">
-      <input id="usernameInput" type="text" placeholder="Enter username (e.g. khurram_gujjar786)">
-    </div>
-
-    <div class="recharge-title">Recharge</div>
-    <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
-
-    <div class="coin-list" id="coinList">
-      <!-- inline coin SVGs preserved from earlier -->
-      <div class="coin-item active" data-coins="30" data-price="0.31">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">30</div>
-        <div class="coin-price">$0.31</div>
-      </div>
-
-      <div class="coin-item" data-coins="350" data-price="3.65">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">350</div>
-        <div class="coin-price">$3.65</div>
-      </div>
-
-      <div class="coin-item" data-coins="700" data-price="7.25">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">700</div>
-        <div class="coin-price">$7.25</div>
-      </div>
-
-      <div class="coin-item" data-coins="1400" data-price="14.49">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">1400</div>
-        <div class="coin-price">$14.49</div>
-      </div>
-
-      <div class="coin-item" data-coins="3500" data-price="36.20">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">3500</div>
-        <div class="coin-price">$36.20</div>
-      </div>
-
-      <div class="coin-item custom">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">Custom</div>
-        <input id="customCoins" type="number" placeholder="Coins" min="1" aria-label="Custom coin amount">
-        <div id="customPrice" style="margin-top:6px;font-weight:700"></div>
-      </div>
-    </div>
-
-    <div class="invite">
-      <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="invite"> Invite & Get Rewards</p>
-      <small>check out this new feature!</small>
-    </div>
-
-    <div class="footer">
-      <span>special offer</span>
-      <span class="right">unlock 5% cash back &gt;</span>
-    </div>
-
-    <div class="payment-logos" aria-hidden="true">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="MasterCard">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196566.png" alt="Bank">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt="PayPal">
-    </div>
-
-    <button id="buyBtn" class="buy-btn">Buy for $0.31</button>
+<!-- ==== MAIN PAGE ==== -->
+<div id="mainPage" class="page main-page active">
+  <h2>Get Coins</h2>
+  <input type="text" placeholder="Enter username (e.g. khurram_gujjar786)" style="width:100%;max-width:320px;padding:10px;border-radius:20px;border:1px solid #ccc;">
+  <div class="coin-box selected">
+    <div>30</div>
+    <div>$0.31</div>
   </div>
+  <button class="buy-btn" onclick="startProcessing()">Pay now</button>
+</div>
 
-  <!-- Order Summary Modal (overlay) -->
-  <div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" role="document" aria-labelledby="orderTitle">
-      <div class="modal-body">
-        <div class="modal-header">
-          <div class="modal-back" id="modalBack" title="Back" aria-label="Back">&larr;</div>
-          <div class="modal-title" id="orderTitle">Order summary</div>
-          <div class="modal-help" title="Help">?</div>
-        </div>
-
-        <div class="secure-row">Secure payment <span class="arrow">&gt;</span></div>
-
-        <div class="row">
-          <div class="left">Account</div>
-          <div class="right" id="accountName">username_here</div>
-        </div>
-
-        <div class="row" style="border-bottom:1px solid #f1f1f1;">
-          <div class="left" id="coinsLabel">30 Coins</div>
-          <div class="right" id="amountLabel">$0.31</div>
-        </div>
-
-        <div style="padding-top:12px;font-weight:700;color:#222">Payment method</div>
-        <div class="pm-list" id="pmList" role="listbox" aria-label="Payment methods">
-          <div class="pm-item pm-selected" data-method="card" tabindex="0" role="option" aria-selected="true">
-            <div class="pm-left"><div style="width:28px;font-weight:700;font-size:20px;">+</div><div class="pm-title">Add debit/credit card</div></div>
-            <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
-          </div>
-
-          <div class="pm-item" data-method="apple" tabindex="0" role="option" aria-selected="false">
-            <div class="pm-left"><div class="pm-icon" aria-hidden="true" style="font-size:13px;"></div><div class="pm-title">Apple Pay</div></div>
-            <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
-          </div>
-
-          <div class="pm-item" data-method="paypal" tabindex="0" role="option" aria-selected="false">
-            <div class="pm-left"><div class="pm-icon" aria-hidden="true" style="font-size:13px;">P</div><div class="pm-title">PayPal</div></div>
-            <div class="pm-right"><div class="pm-radio"><div class="dot"></div></div></div>
-          </div>
-        </div>
-
-        <div class="notice" style="margin-top:12px">
-          <div style="color:#888;font-size:13px">By tapping <span class="red">Pay now</span> to make a purchase, you acknowledge that you are purchasing a limited license to access this</div>
-          <div class="chev" aria-hidden="true">&#9660;</div>
-        </div>
-
-        <div class="total-row">
-          <div>Total</div><div id="totalAmount">$0.31</div>
-        </div>
-
-        <button id="payNow" class="pay-now-btn">Pay Now</button>
-      </div>
-    </div>
+<!-- ==== PROCESSING PAGE ==== -->
+<div id="processingPage" class="page processing-page">
+  <div class="dots">
+    <div class="dot red"></div>
+    <div class="dot blue"></div>
   </div>
+  <div style="font-weight:bold;">Processing your payment</div>
+  <div style="color:#666;margin-top:5px;">This could take few seconds</div>
+  <div id="timer" class="timer">04:57</div>
+  <button class="back-btn" onclick="goBackToMain()">Go back</button>
+</div>
 
-  <!-- Processing full screen (pale pink) -->
-  <div id="processing" class="processing" role="status" aria-hidden="true" aria-live="polite">
-    <div class="processing-inner" role="region" aria-label="Processing payment">
-      <div class="loader" aria-hidden="true">
-        <div class="circle-base circle-blue" aria-hidden="true" style="width:64px;height:64px;border-radius:50%;"></div>
-        <div class="circle-base circle-red" aria-hidden="true" style="width:64px;height:64px;border-radius:50%;"></div>
-      </div>
-
-      <div>
-        <div class="processing-title">Processing your payment</div>
-        <div class="processing-sub">This could take few seconds</div>
-      </div>
-
-      <div class="timer" id="processingTimer">04:57</div>
-
-      <button class="go-back" id="processingGoBack">Go back</button>
-    </div>
-  </div>
-
-  <!-- success overlay -->
-  <div class="success" id="successBox" role="alert" aria-live="assertive" style="z-index:1300;">
-    <div style="font-size:22px;margin-bottom:8px">✅ Payment Successful</div>
-    <div id="successText" style="color:#444">Your coins will be added to the account shortly.</div>
-    <button class="ok" id="successOk">OK</button>
-  </div>
+<!-- ==== SUCCESS PAGE ==== -->
+<div id="successPage" class="page success-page">
+  <svg class="checkmark" viewBox="0 0 52 52">
+    <circle cx="26" cy="26" r="25" fill="none"/>
+    <path fill="none" stroke="#00c851" stroke-width="5" d="M14 27l7 7 17-17"/>
+  </svg>
+  <div class="success-text">Successful recharge!</div>
+  <div class="info-text" id="coinInfo">300,000 Coins were sent to khurram_gujjar786</div>
+  <div class="info-text">This operation has been completed. It will be processed within 24 hours!</div>
+  <button class="back-btn" onclick="goBackToMain()">Go back</button>
+</div>
 
 <script>
-  /*****************
-   Helpers & state
-  *****************/
-  function money(n){
-    const num = Number(n) || 0;
-    return '$' + num.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
-  }
-  function intWithCommas(n){ return (Number(n)||0).toLocaleString(); }
-
-  // elements
-  const coinItems = document.querySelectorAll('.coin-item');
-  const buyBtn = document.getElementById('buyBtn');
-  const usernameInput = document.getElementById('usernameInput');
-  const customInput = document.getElementById('customCoins');
-  const customPrice = document.getElementById('customPrice');
-
-  const overlay = document.getElementById('overlay');
-  const modalBack = document.getElementById('modalBack');
-  const accountName = document.getElementById('accountName');
-  const coinsLabel = document.getElementById('coinsLabel');
-  const amountLabel = document.getElementById('amountLabel');
-  const totalAmount = document.getElementById('totalAmount');
-  const payNow = document.getElementById('payNow');
-
-  const pmList = document.getElementById('pmList');
-
-  const processingEl = document.getElementById('processing');
-  const processingTimerEl = document.getElementById('processingTimer');
-  const processingGoBack = document.getElementById('processingGoBack');
-
-  const successBox = document.getElementById('successBox');
-  const successOk = document.getElementById('successOk');
-
-  // state
-  let selectedCoins = 30;
-  let selectedPrice = 0.31;
-  let selectedPM = 'card';
-
-  // timer state
-  let procInterval = null;
-  let procStep = 0; // 0 -> show 04:57, 1 -> 04:58, 2 -> 04:59, 3 -> 05:00
-
-  /*****************
-   UI initialization
-  *****************/
-  function setBuyLabel(amount){
-    buyBtn.textContent = `Buy for ${money(amount)}`;
-  }
-  setBuyLabel(selectedPrice);
-
-  // coin selection
-  coinItems.forEach(item=>{
-    item.addEventListener('click', (e)=>{
-      if(item.classList.contains('custom') && e.target === customInput) return;
-      coinItems.forEach(c=>c.classList.remove('active'));
-      item.classList.add('active');
-
-      if(item.classList.contains('custom')){
-        if(customInput) customInput.focus();
-        const val = Number(customInput?.value) || 0;
-        if(val>0){
-          const price = val * 0.0103333333;
-          customPrice.textContent = money(price);
-          setBuyLabel(price);
-          selectedCoins = val;
-          selectedPrice = price;
-        } else {
-          setBuyLabel(0);
-          customPrice.textContent = '';
-        }
-        return;
-      }
-
-      selectedCoins = Number(item.dataset.coins) || 0;
-      selectedPrice = Number(item.dataset.price) || 0;
-      if(customInput){ customInput.value=''; customPrice.textContent=''; }
-      setBuyLabel(selectedPrice);
-    });
-  });
-
-  if(customInput){
-    customInput.addEventListener('input', ()=>{
-      coinItems.forEach(c=>c.classList.remove('active'));
-      const customItem = customInput.closest('.coin-item');
-      if(customItem) customItem.classList.add('active');
-      const coins = Number(customInput.value) || 0;
-      if(coins>0){
-        const price = coins * 0.0103333333;
-        customPrice.textContent = money(price);
-        setBuyLabel(price);
-        selectedCoins = coins;
-        selectedPrice = price;
-      } else {
-        customPrice.textContent = '';
-        setBuyLabel(0);
-      }
-    });
-  }
-
-  /*****************
-   Modal open/close
-  *****************/
-  function openModal(){
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden','false');
-    const user = (usernameInput.value || '').trim() || 'username_here';
-    accountName.textContent = user;
-    coinsLabel.textContent = `${intWithCommas(selectedCoins)} Coins`;
-    amountLabel.textContent = money(selectedPrice);
-    totalAmount.textContent = money(selectedPrice);
-    payNow.textContent = `Pay ${money(selectedPrice)}`;
-    const firstPM = pmList.querySelector('.pm-item');
-    if(firstPM) firstPM.focus();
-  }
-  function closeModal(){
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden','true');
-  }
-
-  buyBtn.addEventListener('click', openModal);
-  modalBack.addEventListener('click', closeModal);
-  overlay.addEventListener('click', (ev)=>{ if(ev.target === overlay) closeModal(); });
-
-  // payment method selection
-  pmList.addEventListener('click', (ev)=>{
-    const item = ev.target.closest('.pm-item');
-    if(!item) return;
-    pmList.querySelectorAll('.pm-item').forEach(i=>{
-      i.classList.remove('pm-selected'); i.setAttribute('aria-selected','false');
-    });
-    item.classList.add('pm-selected'); item.setAttribute('aria-selected','true');
-    selectedPM = item.dataset.method;
-  });
-
-  // keyboard support
-  pmList.querySelectorAll('.pm-item').forEach(i=>{
-    i.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault(); i.click();
-      }
-    });
-  });
-
-  /*****************
-   Processing screen behavior
-  *****************/
-  function showProcessing(){
-    // hide modal first
-    closeModal();
-
-    // reset processing UI
-    procStep = 0;
-    processingTimerEl.textContent = '04:57';
-    processingEl.classList.add('show');
-    processingEl.setAttribute('aria-hidden','false');
-
-    // start interval (1 second steps)
-    clearInterval(procInterval);
-    procInterval = setInterval(()=>{
-      procStep++;
-      // mapping steps to labels:
-      // 0 -> 04:57 (already shown), 1 -> 04:58, 2 -> 04:59, 3 -> 05:00
-      const labels = ['04:57','04:58','04:59','05:00'];
-      if(procStep >= 0 && procStep < labels.length){
-        processingTimerEl.textContent = labels[procStep];
-      }
-      if(procStep >= labels.length - 1){
-        // finished — wait tiny moment then auto-show success and hide processing
-        clearInterval(procInterval);
-        setTimeout(()=> {
-          processingEl.classList.remove('show');
-          processingEl.setAttribute('aria-hidden','true');
-          // show success box
-          successBox.classList.add('show');
-          // fill success text
-          document.getElementById('successText').textContent = `${intWithCommas(selectedCoins)} coins purchased for ${money(selectedPrice)} and will be credited to ${accountName.textContent}.`;
-        }, 350); // small delay so last tick is visible
-      }
-    }, 1000);
-  }
-
-  function hideProcessingAndReturn(){
-    clearInterval(procInterval);
-    processingEl.classList.remove('show');
-    processingEl.setAttribute('aria-hidden','true');
-    // return to order modal so the user can edit / try again
-    openModal();
-  }
-
-  // Wire Pay Now to processing
-  payNow.addEventListener('click', ()=>{
-    if((Number(selectedPrice) || 0) <= 0){
-      alert('Please choose a valid coin amount.');
-      return;
+function startProcessing() {
+  document.getElementById('mainPage').classList.remove('active');
+  document.getElementById('processingPage').classList.add('active');
+  let timerEl = document.getElementById('timer');
+  let seconds = 57;
+  const interval = setInterval(() => {
+    seconds++;
+    if (seconds > 60) { 
+      clearInterval(interval);
+      showSuccess();
+    } else {
+      timerEl.textContent = "04:" + (seconds < 10 ? "0" + seconds : seconds);
     }
-    showProcessing();
-  });
+  }, 1000);
+}
 
-  // Go back cancels processing and returns to modal
-  processingGoBack.addEventListener('click', ()=>{
-    hideProcessingAndReturn();
-  });
+function showSuccess() {
+  document.getElementById('processingPage').classList.remove('active');
+  document.getElementById('successPage').classList.add('active');
+}
 
-  // Clicking overlay background while processing does nothing (to avoid accidental close)
-  processingEl.addEventListener('click', (ev)=>{
-    if(ev.target === processingEl){
-      // do nothing (user should use "Go back" to cancel)
-    }
-  });
-
-  // success ok close flow
-  successOk.addEventListener('click', ()=>{
-    successBox.classList.remove('show');
-    // optionally, could reset selections — keep current behavior of closing everything
-  });
-
-  // init default selection
-  (function init(){
-    const active = document.querySelector('.coin-item.active') || document.querySelector('.coin-item');
-    if(active && !active.classList.contains('custom')){
-      selectedCoins = Number(active.dataset.coins) || selectedCoins;
-      selectedPrice = Number(active.dataset.price) || selectedPrice;
-      setBuyLabel(selectedPrice);
-    }
-  })();
-
-  // cleanup on unload
-  window.addEventListener('beforeunload', ()=>{ clearInterval(procInterval); });
+function goBackToMain() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('mainPage').classList.add('active');
+}
 </script>
 </body>
 </html>
