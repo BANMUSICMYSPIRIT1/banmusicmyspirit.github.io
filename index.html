@@ -1,64 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Get Coins</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #fff; margin: 0; padding: 0; }
-    .container { max-width: 400px; margin: 18px auto; padding: 15px; border: 1px solid #ddd; border-radius: 10px; }
-
-    /* Header */
-    .header { display:flex; justify-content:center; align-items:center; font-weight:900; font-size:20px; position:relative; }
-    .header-icons { position:absolute; right:10px; display:flex; gap:12px; }
-    .circle { border:1px solid #000; border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer; }
-
-    /* Username */
-    .username-bar { display:flex; align-items:center; margin:15px 0; border:1px solid #ddd; border-radius:20px; padding:8px 12px; }
-    .username-bar img { width:30px; margin-right:10px; }
-    .username-bar input { border:none; outline:none; flex:1; font-size:15px; }
-
-    /* Recharge */
-    .recharge-title { font-weight:bold; margin-top:6px; font-size:16px; }
-    .recharge-sub { color:#b22222; font-size:14px; margin:6px 0 14px 0; }
-
-    /* Coin grid */
-    .coin-list { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
-    .coin-item {
-      border:1px solid #ddd; border-radius:8px; text-align:center;
-      padding:12px 8px; font-size:14px; cursor:pointer; transition: all 0.15s ease-in-out;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; user-select:none;
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
 
-    /* svg sizing */
-    .coin-item svg { width:36px; height:36px; margin-bottom:8px; display:block; }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
 
-    /* coin text styling: count bolder than price */
-    .coin-count { font-size:18px; font-weight:800; line-height:1; }
-    .coin-price { font-size:13px; color:#444; margin-top:6px; font-weight:500; }
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 900;
+      font-size: 20px;
+      position: relative;
+    }
 
-    .coin-item.custom .coin-count { margin-top:2px; }
-    .coin-item input { width:72%; text-align:center; border:none; outline:none; font-size:14px; margin-top:8px; padding:6px 4px; border-radius:6px; background:#fff; box-shadow:inset 0 0 0 1px #eee; }
+    .header-icons {
+      position: absolute;
+      right: 10px;
+      display: flex;
+      gap: 15px;
+    }
 
-    /* selected */
-    .coin-item.active { border:2px solid #e02020; background:#fff0f0; box-shadow:0 1px 6px rgba(224,32,32,0.06); }
+    .circle {
+      border: 1px solid #000;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+    }
 
-    /* Invite / mobile / footer */
-    .invite { margin:18px 0 6px; }
-    .invite img { width:24px; margin-right:10px; vertical-align:middle; }
-    .invite p { margin:0; font-size:14px; display:flex; align-items:center; gap:8px; }
-    .invite small { font-size:12px; color:gray; display:block; margin-top:4px; }
+    /* Username bar */
+    .username-bar {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 8px 12px;
+    }
 
-    .add-mobile { margin:14px 0; display:flex; align-items:center; font-size:13px; gap:10px; }
-    .add-mobile img { width:22px; }
+    .username-bar img {
+      width: 28px;
+      margin-right: 10px;
+    }
 
-    .footer { display:flex; justify-content:space-between; align-items:center; font-size:13px; margin-top:16px; }
-    .footer .right { color:#b22222; cursor:pointer; }
-    .payment-logos { margin:12px 0; display:flex; justify-content:center; gap:14px; }
-    .payment-logos img { width:40px; }
+    .username-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+    }
 
-    .buy-btn { display:block; width:100%; padding:14px; text-align:center; background:#e02020; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer; margin-top:8px; }
-    #customPrice { margin-top:6px; font-weight:700; }
+    /* Recharge Section */
+    .recharge-title {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .recharge-sub {
+      color: #b22222;
+      font-size: 14px;
+      margin: 5px 0 15px 0;
+    }
+
+    .coin-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .coin-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .coin-item.active {
+      border: 2px solid red;
+      background: #ffe6e6;
+    }
+
+    .coin-item svg {
+      width: 22px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .coin-item input {
+      width: 60%;
+      text-align: center;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    /* Invite & Get Rewards */
+    .invite {
+      margin: 20px 0;
+    }
+
+    .invite img {
+      width: 24px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    .invite p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .invite small {
+      font-size: 12px;
+      color: gray;
+    }
+
+    /* Add to mobile desktop */
+    .add-mobile {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      gap: 10px;
+    }
+
+    .add-mobile img {
+      width: 22px;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-top: 20px;
+    }
+
+    .footer .right {
+      color: #b22222;
+      cursor: pointer;
+    }
+
+    .payment-logos {
+      margin: 15px 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .payment-logos img {
+      width: 40px;
+    }
+
+    /* Buy Button */
+    .buy-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      text-align: center;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Overlay (Order Summary) */
+    .overlay {
+      position: fixed;
+      left: 0;
+      bottom: -100%;
+      width: 100%;
+      height: 50%;
+      background: #fff;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      transition: bottom 0.3s ease-in-out;
+      padding: 15px;
+      z-index: 1000;
+      max-width: 400px;
+      margin: auto;
+      right: 0;
+    }
+
+    .overlay.active {
+      bottom: 0;
+    }
+
+    .overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .overlay-header .back {
+      position: absolute;
+      left: 10px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .overlay-header .help {
+      position: absolute;
+      right: 10px;
+      cursor: pointer;
+    }
+
+    .secure {
+      color: green;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      font-size: 15px;
+    }
+
+    .payment-method {
+      margin: 20px 0;
+    }
+
+    .method {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .circle-select {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #aaa;
+      border-radius: 50%;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-select.active {
+      border-color: red;
+      background: red;
+    }
+
+    .method img {
+      width: 28px;
+      margin-right: 8px;
+    }
+
+    .notice {
+      font-size: 12px;
+      color: gray;
+      margin: 10px 0;
+    }
+
+    .notice span {
+      color: red;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .pay-now-btn {
+      width: 100%;
+      padding: 12px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -72,114 +327,69 @@
       </div>
     </div>
 
-    <!-- Username -->
+    <!-- Username bar -->
     <div class="username-bar">
       <img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok Logo">
-      <input type="text" placeholder="Enter username" aria-label="Enter username">
+      <input type="text" id="username" placeholder="Enter username">
     </div>
 
     <!-- Recharge -->
     <div class="recharge-title">Recharge</div>
     <div class="recharge-sub">Save around 25% with a lower third-party service fee.</div>
 
-    <!-- Coin list: every tile includes the TikTok coin SVG -->
     <div class="coin-list">
-      <div class="coin-item" data-coins="30" data-price="0.31">
-        <!-- TikTok coin SVG -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">30</div>
-        <div class="coin-price">$0.31</div>
-      </div>
-
-      <div class="coin-item" data-coins="350" data-price="3.65">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">350</div>
-        <div class="coin-price">$3.65</div>
-      </div>
-
-      <div class="coin-item" data-coins="700" data-price="7.25">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">700</div>
-        <div class="coin-price">$7.25</div>
-      </div>
-
-      <div class="coin-item" data-coins="1400" data-price="14.49">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">1400</div>
-        <div class="coin-price">$14.49</div>
-      </div>
-
-      <div class="coin-item" data-coins="3500" data-price="36.20">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">3500</div>
-        <div class="coin-price">$36.20</div>
-      </div>
-
-      <!-- Custom -->
+      <div class="coin-item" data-coins="30000" data-price="310.00">30,000 Coins<br>$310.00</div>
+      <div class="coin-item" data-coins="300000" data-price="3120.00">300,000 Coins<br>$3120.00</div>
       <div class="coin-item custom">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle cx="32" cy="32" r="30" fill="#FFD166" stroke="#E08A00" stroke-width="3"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#111"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#69C9D0" opacity="0.85" transform="translate(-2,2)"/>
-          <path d="M38 20v4.5c2.5 1.8 5 2.7 7 2.8v5c-3-.1-5.6-1-7-2V42c0 6-4.5 10-10 10s-10-4-10-10 4.5-10 10-10c1.2 0 2.5.2 3.5.6v5.2c-1-.5-2-.8-3.5-.8-3 0-5 2-5 5s2 5 5 5 5-2 5-5V20h5z" fill="#EE1D52" opacity="0.75" transform="translate(2,-2)"/>
-        </svg>
-        <div class="coin-count">Custom</div>
-        <input type="number" id="customCoins" placeholder="Coins" min="1" aria-label="Custom coin amount">
+        Custom<br>
+        <input type="number" id="customCoins" placeholder="Coins">
         <div id="customPrice"></div>
       </div>
     </div>
 
-    <!-- Invite -->
-    <div class="invite">
-      <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="invite"> Invite & Get Rewards</p>
-      <small>check out this new feature!</small>
-    </div>
+    <!-- Buy Button -->
+    <button class="buy-btn" id="buyBtn">Buy for $0.00</button>
+  </div>
 
-    <!-- Add to mobile -->
-    <div class="add-mobile">
-      <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="file icon">
-      <span>Add this page to the mobile desktop for easy access with just one click</span>
+  <!-- Overlay -->
+  <div class="overlay" id="overlay">
+    <div class="overlay-header">
+      <span class="back" id="backBtn">←</span>
+      Order Summary
+      <span class="help">?</span>
     </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <span>special offer</span>
-      <span class="right">unlock 5% cash back &gt;</span>
+    <div class="secure">✔ Secure payment ></div>
+    <div class="summary-row">
+      <span>Account</span>
+      <span id="summaryUsername">-</span>
     </div>
-
-    <div class="payment-logos">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="MasterCard">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196566.png" alt="Bank">
-      <img src="https://cdn-icons-png.flaticon.com/512/196/196565.png" alt="PayPal">
+    <div class="summary-row">
+      <span id="summaryCoins">0 Coins</span>
+      <span id="summaryPrice">$0.00</span>
     </div>
-
-    <button class="buy-btn" id="buyBtn" aria-live="polite">Buy for $0.31</button>
+    <div class="payment-method">
+      <div class="method" data-method="card">
+        <div class="circle-select"></div>
+        <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Card">
+        Add debit/credit card
+      </div>
+      <div class="method" data-method="apple">
+        <div class="circle-select"></div>
+        <img src="https://developer.apple.com/design/human-interface-guidelines/apple-pay/images/apple-pay-logo.png" alt="Apple Pay">
+        Apple Pay
+      </div>
+      <div class="method" data-method="paypal">
+        <div class="circle-select"></div>
+        <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal">
+        PayPal
+      </div>
+    </div>
+    <div class="notice">By tapping <span>Pay now</span> to make a purchase, you acknowledge that you are purchasing a limited license to access this ⬇</div>
+    <div class="total">
+      <span>Total</span>
+      <span id="summaryTotal">$0.00</span>
+    </div>
+    <button class="pay-now-btn">Pay Now</button>
   </div>
 
   <script>
@@ -187,69 +397,71 @@
     const buyBtn = document.getElementById('buyBtn');
     const customInput = document.getElementById('customCoins');
     const customPrice = document.getElementById('customPrice');
+    const overlay = document.getElementById('overlay');
+    const backBtn = document.getElementById('backBtn');
+    const usernameInput = document.getElementById('username');
 
-    function setBuyPrice(value) {
-      const n = Number(value) || 0;
-      buyBtn.textContent = `Buy for $${n.toFixed(2)}`;
-    }
+    const summaryUsername = document.getElementById('summaryUsername');
+    const summaryCoins = document.getElementById('summaryCoins');
+    const summaryPrice = document.getElementById('summaryPrice');
+    const summaryTotal = document.getElementById('summaryTotal');
 
-    // Click behavior
+    let selectedCoins = 0;
+    let selectedPrice = 0;
+
+    // Select coin items
     coinItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        // If custom item clicked and user clicked the input, ignore here
-        if (item.classList.contains('custom') && e.target === customInput) return;
-
-        // mark active
+      item.addEventListener('click', () => {
         coinItems.forEach(c => c.classList.remove('active'));
         item.classList.add('active');
-
-        // if custom item clicked (but not input) focus input and use its value if present
-        if (item.classList.contains('custom')) {
-          customInput.focus();
-          const val = Number(customInput.value);
-          if (val > 0) {
-            const price = val * 0.0103333333;
-            customPrice.textContent = `$${price.toFixed(2)}`;
-            setBuyPrice(price);
-          } else {
-            // if empty, keep default placeholder price or set to 0.00
-            setBuyPrice(0.00);
-            customPrice.textContent = "";
-          }
-          return;
-        }
-
-        // regular coin: use data-price
-        const price = parseFloat(item.dataset.price);
-        if (!Number.isNaN(price)) {
-          // clear custom input
-          if (customInput) { customInput.value = ""; customPrice.textContent = ""; }
-          setBuyPrice(price);
+        let coins = item.getAttribute('data-coins');
+        let price = item.getAttribute('data-price');
+        if (coins && price) {
+          selectedCoins = coins;
+          selectedPrice = price;
+          buyBtn.textContent = `Buy for $${price}`;
         }
       });
     });
 
-    // Custom input handler
-    if (customInput) {
-      customInput.addEventListener('input', () => {
-        coinItems.forEach(c => c.classList.remove('active'));
-        const customItem = customInput.closest('.coin-item');
-        if (customItem) customItem.classList.add('active');
+    // Custom input
+    customInput.addEventListener('input', () => {
+      coinItems.forEach(c => c.classList.remove('active'));
+      customInput.closest('.coin-item').classList.add('active');
+      let coins = customInput.value;
+      if (coins) {
+        let price = (coins * 0.0103).toFixed(2);
+        selectedCoins = coins;
+        selectedPrice = price;
+        customPrice.textContent = `$${price}`;
+        buyBtn.textContent = `Buy for $${price}`;
+      } else {
+        customPrice.textContent = "";
+      }
+    });
 
-        const coins = Number(customInput.value);
-        if (coins > 0) {
-          const price = coins * 0.0103333333; // derived rate (30 ≈ 0.31)
-          customPrice.textContent = `$${price.toFixed(2)}`;
-          setBuyPrice(price);
-        } else {
-          customPrice.textContent = "";
-          setBuyPrice(0.00);
-        }
+    // Open overlay
+    buyBtn.addEventListener('click', () => {
+      summaryUsername.textContent = usernameInput.value || "Guest";
+      summaryCoins.textContent = `${selectedCoins} Coins`;
+      summaryPrice.textContent = `$${selectedPrice}`;
+      summaryTotal.textContent = `$${selectedPrice}`;
+      overlay.classList.add('active');
+    });
+
+    // Close overlay
+    backBtn.addEventListener('click', () => {
+      overlay.classList.remove('active');
+    });
+
+    // Payment method selection
+    const methods = document.querySelectorAll('.method');
+    methods.forEach(m => {
+      m.addEventListener('click', () => {
+        document.querySelectorAll('.circle-select').forEach(c => c.classList.remove('active'));
+        m.querySelector('.circle-select').classList.add('active');
       });
-    }
-
-    // initialize default
-    setBuyPrice(0.31);
+    });
   </script>
 </body>
 </html>
